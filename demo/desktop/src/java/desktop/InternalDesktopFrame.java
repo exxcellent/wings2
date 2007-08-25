@@ -31,8 +31,7 @@ public class InternalDesktopFrame
 
     public InternalDesktopFrame() {
         super();
-        String clientIP = org.wings.session.SessionManager.getSession().getServletRequest().getRemoteAddr();
-        pref = PreferenceHandler.getPreferenceHandler().getItemPreferences();
+        pref = Preferences.userRoot().node("desktopitems");
 
         this.setName("frame" + frameNo.get().toString());
         frameNo.set(frameNo.get() + 1);

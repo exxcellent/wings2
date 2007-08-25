@@ -13,7 +13,7 @@ public abstract class AbstractDesktopItem
     protected java.util.Map<String, Object> attributes = new java.util.HashMap<String, Object>();
     protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     protected ItemContainer container;
-    protected PreferenceHandler prefHandler;
+    
     protected Preferences pref;
 
 
@@ -28,8 +28,7 @@ public abstract class AbstractDesktopItem
 
     protected AbstractDesktopItem() {
 
-        prefHandler = PreferenceHandler.getPreferenceHandler();
-        pref = prefHandler.getItemPreferences().node("desktopitem" + itemNo.get().toString());
+    	pref = Preferences.userRoot().node("desktopitems").node("desktopitem" + itemNo.get().toString());
         this.putValue(KEY, "desktopitem" + itemNo.get().toString());
         itemNo.set(itemNo.get() + 1);
         pref.putInt(FIRST_FREE_INDEX, itemNo.get());
@@ -51,8 +50,7 @@ public abstract class AbstractDesktopItem
 
     protected AbstractDesktopItem(String name) {
 
-        prefHandler = PreferenceHandler.getPreferenceHandler();
-        pref = prefHandler.getItemPreferences().node(name);
+        pref = Preferences.userRoot().node("desktopitems").node(name);
         this.putValue(KEY, name);
         addPropertyChangeListener(new PropertyChangeListener()
         {

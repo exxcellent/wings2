@@ -31,7 +31,7 @@ public class DesktopPane
         setName(name);
 
 
-        pref = PreferenceHandler.getPreferenceHandler().getPanePreferences().node(this.getName());
+        pref = Preferences.userRoot().node("desktoppanes").node(this.getName());
 
         setCG(new DpCG());
         setVerticalAlignment(SConstants.TOP_ALIGN);
@@ -45,7 +45,7 @@ public class DesktopPane
         setName("desktoppane" + paneNo.get().toString());
         paneNo.set(paneNo.get() + 1);
 
-        pref = PreferenceHandler.getPreferenceHandler().getPanePreferences().node(this.getName());
+        pref = Preferences.userRoot().node("desktoppanes").node(this.getName());
         pref.putInt(FIRST_FREE_INDEX, paneNo.get());
 
 
@@ -82,7 +82,7 @@ public class DesktopPane
     public void addDesktopItem(DesktopItem contentItem) {
         final InternalDesktopFrame newFrame = new InternalDesktopFrame();
         contentItem.setContainer(newFrame);
-        Preferences p = PreferenceHandler.getPreferenceHandler().getItemPreferences();
+        Preferences p = Preferences.userRoot().node("desktopitems");
         p.node((String)contentItem.getValue(DesktopItem.KEY)).put(DesktopItem.DESKTOPPANE, this.getName());
         p.node((String)contentItem.getValue(DesktopItem.KEY)).putInt(DesktopItem.POSITION_ON_PANE, getComponentList().size() - 1);
 

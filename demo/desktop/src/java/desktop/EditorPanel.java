@@ -96,6 +96,10 @@ public class EditorPanel
 
     }
 
+    public static void resetEditorNo(){
+        editorNr.set(0);
+    }
+    
     protected SMenuBar createMenu() {
         SMenuItem saveItem = new SMenuItem("Save");
         saveItem.addActionListener(new ActionListener()

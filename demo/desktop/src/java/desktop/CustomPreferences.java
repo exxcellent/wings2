@@ -10,6 +10,8 @@ package desktop;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -42,6 +44,17 @@ public class CustomPreferences
 {
 
     /**
+     * Name for the cookies containing the users' state
+     */
+    private static String COOKIE_NAME = "PreferencesCookie";
+    
+    /**
+     * Key for the next unused User ID in the System Preferences
+     */
+    private static String NEXT_FREE_USER_ID = "nextFreeUserID";
+    
+    
+    /**
      * Returns logger for error messages. Backing store exceptions are logged at
      * WARNING level.
      */
@@ -58,28 +71,80 @@ public class CustomPreferences
      * Flag, indicating whether systemRoot  directory is writable
      */
     private static boolean isSystemRootWritable;
-
+    
     /**
-     * Directory for user preferences.
+     * the user roots
      */
-    private static File userRootDir;
-
-
-    /**
-     * The user root.
-     */
-    static Preferences userRoot = null;
-
+    private static Map<String, CustomPreferences> userRoots = new HashMap<String, CustomPreferences>();
+ 
     static synchronized Preferences getUserRoot() {
-        if (userRoot == null) {
-            setupUserRoot();
-            userRoot = new CustomPreferences(true);
-        }
+        String userName = resolveUserName();
+        
+        if(userRoots.containsKey(userName))
+            return userRoots.get(userName);
+        
+        CustomPreferences userRoot = new CustomPreferences(true);
+        userRoots.put(userName, userRoot);
         return userRoot;
+        
+        
     }
+    
+    private static synchronized String resolveUserName(){
+        String userName = "user/";
+        
+        HttpServletRequest request = org.wings.session.SessionManager.getSession().getServletRequest();
+        
+        //if authorized user, use this name
+        if(request.getUserPrincipal()!= null && request.getUserPrincipal().getName()!= null){
+           userName = request.getUserPrincipal().getName();
+           
+        }else{
+           boolean isAlreadyKnown = false;
+           Cookie[] cookies = request.getCookies();
+           if(cookies != null){
+               for(int i=0; i< cookies.length; i++){
+                   if(cookies[i].getName().equals(COOKIE_NAME)){
+                       //pref = Preferences.userRoot().node(cookies[i].getValue());
+                       userName = cookies[i].getValue();
+                       isAlreadyKnown = true;
+                       break;
+                   }
+               }
+           }
+            
+            
+            if(!isAlreadyKnown){
+                //pref = Preferences.userRoot().node(userID.toString());
+                int userID = getSystemRoot().getInt(NEXT_FREE_USER_ID, 0);
+                userName = ((Integer)userID).toString();
+                
+                //Set the cookie
+                Cookie cookie= new Cookie(COOKIE_NAME, userName);
+                cookie.setMaxAge(1000000000);
+                org.wings.session.SessionManager.getSession().getServletResponse().addCookie(cookie);
+                userID++;
+                getSystemRoot().putInt(NEXT_FREE_USER_ID,userID);
+                
+                
+                try{
+                    getSystemRoot().flush();
+                    
+                }catch(Exception ex){ex.printStackTrace();}
+                
+            }
+            
+        }
+        
+        return userName;
+        
+    }
+    
+    
 
-    private static void setupUserRoot() {
-        userRootDir = new File("./Prefs/user/");
+    private static File setupUserRoot(String userName) {
+         
+        File userRootDir = new File("./Prefs/" + userName);
 //                      new File(System.getProperty("java.util.prefs.userRoot",
 //                      System.getProperty("user.home")), ".java/.userPrefs");
         // Attempt to create root dir if it does not yet exist.
@@ -92,23 +157,19 @@ public class CustomPreferences
                 getLogger().warning("Couldn't create user preferences" +
                     " directory. User preferences are unusable.");
         }
-
+               
         String USER_NAME = System.getProperty("user.name");
-        userLockFile = new File(userRootDir, ".user.lock." + USER_NAME);
-        userRootModFile = new File(userRootDir,
-                                   ".userRootModFile." + USER_NAME);
+        userLockFile = new File (userRootDir, ".user.lock." + USER_NAME);
+        userRootModFile = new File (userRootDir, ".userRootModFile." + USER_NAME);
         if (!userRootModFile.exists())
             try {
                 // create if does not exist.
                 userRootModFile.createNewFile();
-
-            }
+            } 
             catch (IOException e) {
-                getLogger().warning(e.toString());
-            }
+            getLogger().warning(e.toString());}
         userRootModTime = userRootModFile.lastModified();
-
-
+        return userRootDir;
     }
 
 
@@ -349,34 +410,6 @@ public class CustomPreferences
             ((Change)changeLog.get(i)).replay();
     }
 
-    /*
-    private static void syncWorld() {
-        
-        Preferences userRt;
-        Preferences systemRt;
-        synchronized(CustomPreferences.class) {
-            userRt   = userRoot;
-            systemRt = systemRoot;
-        }
-
-        try {
-            if (userRt != null){
-            	
-            	((CustomPreferences)userRt).flush();
-            }
-                
-        } catch(BackingStoreException e) {
-            getLogger().warning("Couldn't flush user prefs: " + e);
-        }
-
-        try {
-            if (systemRt != null)
-                systemRt.flush();
-        } catch(BackingStoreException e) {
-            getLogger().warning("Couldn't flush system prefs: " + e);
-        }
-    }
-*/
     private final boolean isUserNode;
 
     /**
@@ -386,15 +419,16 @@ public class CustomPreferences
     private CustomPreferences(boolean user) {
         super(null, "");
         isUserNode = user;
-        dir = (user ? userRootDir : systemRootDir);
-
+                
+        dir = (user ? setupUserRoot(resolveUserName()): systemRootDir);
+        
         prefsFile = new File(dir, "prefs.xml");
 
         tmpFile = new File(dir, "prefs.tmp");
 
         if (newNode) {
             // These 2 things guarantee node will get wrtten at next flush/sync
-            prefsCache = new TreeMap();
+            prefsCache = new TreeMap<String,String>();
             nodeCreate = new NodeCreate();
             changeLog.add(nodeCreate);
         }
@@ -417,7 +451,7 @@ public class CustomPreferences
 
         if (newNode) {
             // These 2 things guarantee node will get wrtten at next flush/sync
-            prefsCache = new TreeMap();
+            prefsCache = new TreeMap<String,String>();
             nodeCreate = new NodeCreate();
             changeLog.add(nodeCreate);
         }
@@ -484,7 +518,6 @@ public class CustomPreferences
             newLastSyncTime = prefsFile.lastModified();
 
             DocumentBuilder docBuilder = javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            System.out.println("Parse file " + prefsFile.getAbsolutePath());
             org.w3c.dom.Document doc = null;
 
             doc = docBuilder.parse(prefsFile);
@@ -615,14 +648,7 @@ public class CustomPreferences
     public void removeNode() throws BackingStoreException {
         synchronized (isUserNode() ? userLockFile : systemLockFile) {
             // to remove a node we need an exclusive lock
-            try {
-                super.removeNode();
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-
+           super.removeNode();
         }
     }
 
@@ -659,7 +685,6 @@ public class CustomPreferences
 
     }
 
-
     public synchronized void sync() throws BackingStoreException {
 
         synchronized (isUserNode() ? userLockFile : systemLockFile) {
@@ -686,7 +711,6 @@ public class CustomPreferences
                 systemRootModTime = newModTime.longValue() + 1000;
                 systemRootModFile.setLastModified(systemRootModTime);
             }
-
         }
     }
 
@@ -695,7 +719,6 @@ public class CustomPreferences
         syncSpiPrivileged();
 
     }
-
     private void syncSpiPrivileged() throws BackingStoreException {
         if (isRemoved())
             throw new IllegalStateException("Node has been removed");

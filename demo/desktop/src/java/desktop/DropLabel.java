@@ -31,8 +31,7 @@ public class DropLabel
         this.setName("droplabel" + labelNo.get().toString());
         labelNo.set(labelNo.get() + 1);
 
-        String clientIP = org.wings.session.SessionManager.getSession().getServletRequest().getRemoteAddr();
-        pref = PreferenceHandler.getPreferenceHandler().getUserRootPreference();
+        pref = Preferences.userRoot();
 
         this.setVerticalAlignment(SConstants.TOP_ALIGN);
         this.setAttribute(CSSProperty.HEIGHT, "200px");

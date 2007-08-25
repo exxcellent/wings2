@@ -41,48 +41,44 @@ public class Desktop
     SMenuBar menuBar;
     int editorNumber = 0;
     int xPos = 0;
-    private PreferenceHandler prefHandler;
+    Preferences prefRoot;
 
     public Desktop() {
-
-        prefHandler = PreferenceHandler.getPreferenceHandler();
 
         frame = new SFrame("Desktop");
         frame.setAttribute(CSSProperty.MARGIN, "4px");
         frame.setVisible(true);
         SContainer contentPane = frame.getContentPane();
-
-        if (prefHandler.returningUser()) {
-
-            SOptionPane.showYesNoDialog(frame, "Do you want to reload your old state?", "Reload old state?", new ActionListener()
-            {
-                public void actionPerformed(ActionEvent evt) {
-                    if (evt.getActionCommand() == SOptionPane.YES_ACTION)
-                        Desktop.this.loadExisting(frame.getContentPane());
-                    else
-                        Desktop.this.createNew(frame.getContentPane());
-                }
-            });
+        prefRoot = Preferences.userRoot();
+        try{
+            if(prefRoot.nodeExists("desktoppanes"))
+                Desktop.this.loadExisting(frame.getContentPane());
+            else
+                Desktop.this.createNew(frame.getContentPane());
+        }catch(BackingStoreException ex){
+            System.out.println("BackingStoreException. Falling back to default settings");
+            Desktop.this.createNew(frame.getContentPane());
         }
-        else
-            createNew(contentPane);
 
         frame.addHeader(new Link("stylesheet", null, "text/css", null, new DefaultURLResource("../desktop.css")));
         flushPreferences();
         frame.show();
     }
 
-    private void createNew(SContainer contentPane) {
-
-        try {
-            for (String name : prefHandler.getUserRootPreference().childrenNames()) {
-                prefHandler.getUserRootPreference().node(name).removeNode();
+    private void createNew(SContainer contentPane){
+        
+        //first clear all old stuf..
+        try{
+            for(String name: Preferences.userRoot().childrenNames()){
+                Preferences.userRoot().node(name).removeNode();
             }
 
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
+        contentPane.removeAll();
+        EditorPanel.resetEditorNo();
 
         menuBar = createMenu();
 
@@ -109,14 +105,14 @@ public class Desktop
         c2.weightx = 0.7;
         contentPane.add(desktop, c2);
         panes.put(desktop.getName(), desktop);
-        prefHandler.getPanePreferences().node(desktop.getName()).putDouble(DesktopPane.WEIGHTX, c2.weightx);
+        prefRoot.node("desktoppanes").node(desktop.getName()).putDouble(DesktopPane.WEIGHTX, c2.weightx);
 
         c3.gridx = xPos;
         xPos++;
         c3.gridy = 1;
         c3.weightx = 0.3;
         contentPane.add(feeds, c3);
-        prefHandler.getPanePreferences().node(feeds.getName()).putDouble(DesktopPane.WEIGHTX, c3.weightx);
+        prefRoot.node("desktoppanes").node(feeds.getName()).putDouble(DesktopPane.WEIGHTX, c3.weightx);
         panes.put(feeds.getName(), feeds);
 
         DesktopItem ed = new EditorItem();
@@ -147,8 +143,8 @@ public class Desktop
         int firstFreeItem = 0;
 
         try {
-            for (String paneName : prefHandler.getPanePreferences().childrenNames()) {
-                Preferences paneNode = prefHandler.getPanePreferences().node(paneName);
+            for(String paneName:  prefRoot.node("desktoppanes").childrenNames()){
+                Preferences paneNode =  prefRoot.node("desktoppanes").node(paneName);
                 DesktopPane p = new DesktopPane(paneName);
                 p.addContainerListener(new DesktopFrameListener(p));
                 firstFreePane = Math.max(firstFreePane, paneNode.getInt(DesktopPane.FIRST_FREE_INDEX, 0));
@@ -161,9 +157,9 @@ public class Desktop
                 panes.put(p.getName(), p);
                 List<DesktopItem> items = new ArrayList<DesktopItem>();
 
-                for (String itemName : prefHandler.getItemPreferences().childrenNames()) {
+                for(String itemName: prefRoot.node("desktopitems").childrenNames()){
 
-                    Preferences itemNode = prefHandler.getItemPreferences().node(itemName);
+                    Preferences itemNode = prefRoot.node("desktopitems").node(itemName);
 
                     if (!paneName.equals(itemNode.get(DesktopItem.DESKTOPPANE, "nix")))
                         continue;
@@ -315,7 +311,7 @@ public class Desktop
                         if (contentPane.getComponent(i) instanceof DesktopPane) {
                             if (((GridBagConstraints)contentPane.getConstraintAt(i)).weightx >= 0.2) {
                                 ((GridBagConstraints)contentPane.getConstraintAt(i)).weightx -= 0.1;
-                                prefHandler.getPanePreferences().node(contentPane.getComponent(i).getName()).putDouble(DesktopPane.WEIGHTX, ((GridBagConstraints)contentPane.getConstraintAt(i)).weightx);
+                                prefRoot.node("desktoppanes").node(contentPane.getComponent(i).getName()).putDouble(DesktopPane.WEIGHTX, ((GridBagConstraints)contentPane.getConstraintAt(i)).weightx);
                                 ct++;
                             }
 
@@ -326,7 +322,7 @@ public class Desktop
                     for (int i = 0; i < contentPane.getComponentCount(); i++) {
                         if (contentPane.getComponent(i) instanceof DesktopPane) {
                             ((GridBagConstraints)contentPane.getConstraintAt(i)).weightx -= 0.2;
-                            prefHandler.getPanePreferences().node(contentPane.getComponent(i).getName()).putDouble(DesktopPane.WEIGHTX, ((GridBagConstraints)contentPane.getConstraintAt(i)).weightx);
+                            prefRoot.node("desktoppanes").node(contentPane.getComponent(i).getName()).putDouble(DesktopPane.WEIGHTX, ((GridBagConstraints)contentPane.getConstraintAt(i)).weightx);
                             break;
                         }
                     }
@@ -344,7 +340,7 @@ public class Desktop
 
                 panes.put(newPane.getName(), newPane);
                 contentPane.add(newPane, c);
-                prefHandler.getPanePreferences().node(newPane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
+                prefRoot.node("desktoppanes").node(newPane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
                 flushPreferences();
 
             }
@@ -410,7 +406,7 @@ public class Desktop
                                         freeSpace -= (input - Math.round(100 * c.weightx));
                                         freeSpaceField.setText(String.valueOf(freeSpace));
                                         c.weightx = input * 0.01;
-                                        prefHandler.getPanePreferences().node(pane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
+                                        prefRoot.node("desktoppanes").node(pane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
 
                                         optionPane.updateOkButtonEnabledState();
                                     }
@@ -433,7 +429,7 @@ public class Desktop
                         {
                             public void actionPerformed(ActionEvent e) {
                                 c.weightx = roundTo1Digit(c.weightx + 0.1);
-                                prefHandler.getPanePreferences().node(pane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
+                                prefRoot.node("desktoppanes").node(pane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
                                 freeSpace -= 10;
                                 tf.setText(String.valueOf(Math.round(100 * c.weightx)));
                                 freeSpaceField.setText(String.valueOf(freeSpace));
@@ -449,7 +445,7 @@ public class Desktop
                             public void actionPerformed(ActionEvent e) {
                                 if (Double.parseDouble(tf.getText()) >= 10) {
                                     c.weightx = roundTo1Digit(c.weightx - 0.1);
-                                    prefHandler.getPanePreferences().node(pane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
+                                    prefRoot.node("desktoppanes").node(pane.getName()).putDouble(DesktopPane.WEIGHTX, c.weightx);
                                     freeSpace += 10;
                                     tf.setText(String.valueOf(Math.round(100.0 * c.weightx)));
                                     freeSpaceField.setText(String.valueOf(freeSpace));
@@ -504,7 +500,7 @@ public class Desktop
                                         dp.removeAll();
                                         frame.getContentPane().remove(dp);
                                         try {
-                                            prefHandler.getPanePreferences().node(dp.getName()).removeNode();
+                                            prefRoot.node("desktoppanes").node(dp.getName()).removeNode();
                                         }
                                         catch (BackingStoreException ex) {
 
@@ -528,7 +524,7 @@ public class Desktop
 
                                 GridBagConstraints c = (GridBagConstraints)frame.getContentPane().getConstraintAt(i);
                                 c.weightx = java.lang.Double.parseDouble(backups.get(i));
-                                prefHandler.getPanePreferences().node(frame.getContentPane().getComponent(i).getName()).putDouble(DesktopPane.WEIGHTX, ((GridBagConstraints)frame.getContentPane().getConstraintAt(i)).weightx);
+                                prefRoot.node("desktoppanes").node(frame.getContentPane().getComponent(i).getName()).putDouble(DesktopPane.WEIGHTX, ((GridBagConstraints)frame.getContentPane().getConstraintAt(i)).weightx);
                             }
                         }
                     }
@@ -538,10 +534,18 @@ public class Desktop
                 flushPreferences();
             }
         });
-
+        
+        SMenuItem resetItem = new SMenuItem("Reset Desktop");
+        resetItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent evt){
+                Desktop.this.createNew(frame.getContentPane());
+            }
+        });
+        
         SMenu desktopMenu = new SMenu("Desktop");
         desktopMenu.add(newPaneItem);
         desktopMenu.add(editPanesItem);
+        desktopMenu.add(resetItem);
 
 
         SMenuBar menuBar = new SMenuBar();
@@ -562,7 +566,7 @@ public class Desktop
 
     private void flushPreferences() {
         try {
-            prefHandler.getUserRootPreference().flush();
+            prefRoot.flush();
         }
         catch (Exception ex) {
             ex.printStackTrace();
