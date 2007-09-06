@@ -548,7 +548,10 @@ public class STree extends SComponent implements Scrollable, LowLevelEventListen
     public TreePath getPathForRow(int row) {
         return treeState.getPathForRow(row);
     }
-
+    
+    public int getRowForPath(TreePath path) {
+        return treeState.getRowForPath(path);
+    }
 
     protected int fillPathForAbsoluteRow(int row, Object node, ArrayList path) {
         // and check if it is the
