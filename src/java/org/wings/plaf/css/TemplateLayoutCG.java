@@ -14,8 +14,7 @@ package org.wings.plaf.css;
 
 import java.io.IOException;
 
-import org.wings.SLayoutManager;
-import org.wings.STemplateLayout;
+import org.wings.*;
 import org.wings.io.Device;
 import org.wings.plaf.LayoutCG;
 import org.wings.template.LabelTagHandler;
@@ -46,7 +45,6 @@ public class TemplateLayoutCG implements LayoutCG {
         parser.addTagHandler("INPUT", SimpleTagHandler.class);
         parser.addTagHandler("LABEL", LabelTagHandler.class);
     }
-
 
     private void write(Device device, STemplateLayout layout)
             throws IOException {

@@ -48,7 +48,7 @@ public class ContainerCG extends AbstractComponentCG implements org.wings.plaf.P
         device.print(">");
 
         // special case templateLayout and card layout. We open a TABLE cell for them.
-        final boolean writeTableData = layout instanceof STemplateLayout || layout instanceof SCardLayout;
+        final boolean writeTableData = layout instanceof STemplateLayout;
         if (writeTableData) {
             device.print("<tr><td");
             Utils.printTableCellAlignment(device, component, SConstants.LEFT_ALIGN, SConstants.TOP_ALIGN);

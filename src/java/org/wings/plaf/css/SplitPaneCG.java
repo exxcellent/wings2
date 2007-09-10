@@ -5,6 +5,7 @@ import org.wings.*;
 import org.wings.header.Header;
 import org.wings.header.SessionHeaders;
 import org.wings.plaf.css.script.OnHeadersLoadedScript;
+import org.wings.plaf.css.script.OnPageRenderedScript;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,31 +44,33 @@ public class SplitPaneCG
         StringBuilder scriptBuilder = STRING_BUILDER.get();
         scriptBuilder.setLength(0);
 
-
         if (splitPane.getOrientation() == SSplitPane.VERTICAL_SPLIT) {
             String topPaneName = name + "_t";
             String bottomPaneName = name + "_b";
             String splitBarName = name + "_tb";
 
+            writeSplitterScript(scriptBuilder, splitBarName, topPaneName, splitPane.getDividerLocation(), "Ext.SplitBar.VERTICAL", "Ext.SplitBar.TOP");
+            splitPane.getSession().getScriptManager().addScriptListener(new OnPageRenderedScript(scriptBuilder.toString()));
+
             writeVertical(device, topPaneName, splitPane.getTopComponent());
             writeVerticalSplitter(device, splitBarName, splitPane.getDividerSize());
             writeVertical(device, bottomPaneName, splitPane.getBottomComponent());
-            writeSplitterScript(scriptBuilder, splitBarName, topPaneName, splitPane.getDividerLocation(), "Ext.SplitBar.VERTICAL", "Ext.SplitBar.TOP");
         }
         else {
             String leftPaneName = name + "_l";
             String rightPaneName = name + "_r";
             String splitBarName = name + "_lr";
 
+            writeSplitterScript(scriptBuilder, splitBarName, leftPaneName, splitPane.getDividerLocation(), "Ext.SplitBar.HORIZONTAL", "Ext.SplitBar.LEFT");
+            splitPane.getSession().getScriptManager().addScriptListener(new OnPageRenderedScript(scriptBuilder.toString()));
+
             device.print("<tr>");
             writeHorizontal(device, leftPaneName, splitPane.getLeftComponent());
             writeHorizontalSplitter(device, splitBarName, splitPane.getDividerSize());
             writeHorizontal(device, rightPaneName, splitPane.getRightComponent());
             device.print("</tr>");
-            writeSplitterScript(scriptBuilder, splitBarName, leftPaneName, splitPane.getDividerLocation(), "Ext.SplitBar.HORIZONTAL", "Ext.SplitBar.LEFT");
         }
 
-        splitPane.getSession().getScriptManager().addScriptListener(new OnHeadersLoadedScript(scriptBuilder.toString()));
 
         device.print("</table>");
     }

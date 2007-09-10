@@ -3,10 +3,12 @@ package wingset;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.*;
+import org.wings.resource.ReloadResource;
 import org.wings.plaf.css.Utils;
 import org.wings.border.SLineBorder;
 import org.wings.header.StyleSheetHeader;
 import org.wings.session.SessionManager;
+import org.wings.session.ResourceMapper;
 
 import javax.swing.tree.*;
 import javax.swing.event.TreeSelectionListener;
@@ -46,7 +48,8 @@ public class WingSet2
     private final SPanel header;
     private final SPanel content;
     private final WingsImage wingsImage;
-    public final SCardLayout cards = new SCardLayout();
+    private final SCardLayout cards = new SCardLayout();
+    private final Map<String, WingSetPane> panesByName = new HashMap<String, WingSetPane>();
 
     /**
      * Constructor of the wingS application.
@@ -57,7 +60,8 @@ public class WingSet2
     public WingSet2() {
         wingsImage = new WingsImage();
 
-        tree = new STree(new PanesTreeModel());
+        PanesTreeModel treeModel = new PanesTreeModel();
+        tree = new STree(treeModel);
         tree.setName("examples");
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
@@ -114,6 +118,26 @@ public class WingSet2
         frame.addHeader(new StyleSheetHeader("../css/wingset2.css"));
 
         frame.show();
+
+        Enumeration enumeration = ((DefaultMutableTreeNode)treeModel.getRoot()).breadthFirstEnumeration();
+        while (enumeration.hasMoreElements()) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)enumeration.nextElement();
+            Object userObject = node.getUserObject();
+            if (userObject instanceof WingSetPane) {
+                WingSetPane wingSetPane = (WingSetPane)userObject;
+                panesByName.put(wingSetPane.getExampleName(), wingSetPane);
+            }
+        }
+
+        SessionManager.getSession().setResourceMapper(new ResourceMapper() {
+            public Resource mapResource(String url) {
+                String name = url.substring(1);
+                WingSetPane pane = panesByName.get(name);
+                if (pane != null)
+                    show(pane);
+                return frame.getDynamicResource(ReloadResource.class);
+            }
+        });
     }
 
     private void show(SComponent component) {

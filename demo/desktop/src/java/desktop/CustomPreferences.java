@@ -9,6 +9,8 @@ package desktop;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.wings.session.SessionManager;
+import org.wings.session.Session;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -92,8 +94,9 @@ public class CustomPreferences
     
     private static synchronized String resolveUserName(){
         String userName = "user/";
-        
-        HttpServletRequest request = org.wings.session.SessionManager.getSession().getServletRequest();
+
+        Session session = SessionManager.getSession();
+        HttpServletRequest request = session.getServletRequest();
         
         //if authorized user, use this name
         if(request.getUserPrincipal()!= null && request.getUserPrincipal().getName()!= null){
@@ -101,20 +104,26 @@ public class CustomPreferences
            
         }else{
            boolean isAlreadyKnown = false;
-           Cookie[] cookies = request.getCookies();
-           if(cookies != null){
-               for(int i=0; i< cookies.length; i++){
-                   if(cookies[i].getName().equals(COOKIE_NAME)){
-                       //pref = Preferences.userRoot().node(cookies[i].getValue());
-                       userName = cookies[i].getValue();
-                       isAlreadyKnown = true;
-                       break;
-                   }
-               }
-           }
+            userName = (String)request.getSession().getAttribute(COOKIE_NAME);
+            if (userName != null)
+                isAlreadyKnown = true;
+            else {
+                Cookie[] cookies = request.getCookies();
+                if(cookies != null){
+                    for(int i=0; i< cookies.length; i++){
+                        if(cookies[i].getName().equals(COOKIE_NAME)){
+                            //pref = Preferences.userRoot().node(cookies[i].getValue());
+                            userName = cookies[i].getValue();
+                            request.getSession().setAttribute(COOKIE_NAME, userName);
+                            isAlreadyKnown = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
             
-            
-            if(!isAlreadyKnown){
+            if(!isAlreadyKnown) {
                 //pref = Preferences.userRoot().node(userID.toString());
                 int userID = getSystemRoot().getInt(NEXT_FREE_USER_ID, 0);
                 userName = ((Integer)userID).toString();
@@ -123,9 +132,10 @@ public class CustomPreferences
                 Cookie cookie= new Cookie(COOKIE_NAME, userName);
                 cookie.setMaxAge(1000000000);
                 org.wings.session.SessionManager.getSession().getServletResponse().addCookie(cookie);
+                request.getSession().setAttribute(COOKIE_NAME, userName);
+
                 userID++;
                 getSystemRoot().putInt(NEXT_FREE_USER_ID,userID);
-                
                 
                 try{
                     getSystemRoot().flush();

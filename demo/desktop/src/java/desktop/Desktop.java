@@ -14,6 +14,7 @@
 package desktop;
 
 import org.wings.*;
+import org.wings.border.SEmptyBorder;
 import org.wings.event.SContainerEvent;
 import org.wings.event.SContainerListener;
 import org.wings.header.Link;
@@ -35,6 +36,10 @@ import java.util.prefs.Preferences;
 public class Desktop
     implements SConstants
 {
+    static {
+        System.setProperty("java.util.prefs.PreferencesFactory", CustomPreferencesFactory.class.getName());
+    }
+
     SFrame frame;
     Map<String, DesktopPane> panes = new HashMap<String, DesktopPane>();
     SMenu windowMenu;
@@ -48,7 +53,6 @@ public class Desktop
         frame = new SFrame("Desktop");
         frame.setAttribute(CSSProperty.MARGIN, "4px");
         frame.setVisible(true);
-        SContainer contentPane = frame.getContentPane();
         prefRoot = Preferences.userRoot();
         try{
             if(prefRoot.nodeExists("desktoppanes"))
@@ -379,6 +383,7 @@ public class Desktop
                 final STextField freeSpaceField = new STextField(String.valueOf(freeSpace));
                 inputPanel.removeAll();
                 inputPanel.setLayout(new SGridLayout(frame.getContentPane().getComponentCount(), 6));
+                inputPanel.setBorder(new SEmptyBorder(10, 10, 10, 10));
                 freeSpace = 100;
                 backups.clear();
                 toBeRemoved.clear();
@@ -389,7 +394,7 @@ public class Desktop
                 for (int i = 0; i < frame.getContentPane().getComponentCount(); i++) {
                     if (frame.getContentPane().getComponent(i) instanceof DesktopPane) {
                         final DesktopPane pane = (DesktopPane)frame.getContentPane().getComponent(i);
-                        final SLabel nameLabel = new SLabel(pane.getName());
+                        final SLabel nameLabel = new SLabel(pane.getName() + " ");
                         inputPanel.add(nameLabel);
                         final GridBagConstraints c = (GridBagConstraints)frame.getContentPane().getConstraintAt(i);
 
@@ -421,7 +426,7 @@ public class Desktop
                         });
 
                         inputPanel.add(tf);
-                        final SLabel percentLabel = new SLabel("%  ");
+                        final SLabel percentLabel = new SLabel(" %  ");
                         inputPanel.add(percentLabel);
 
                         final SButton plusButton = new SButton("+");
@@ -485,7 +490,7 @@ public class Desktop
                 freeSpaceField.setText(String.valueOf(freeSpace));
 
                 inputPanel.add(freeSpaceField);
-                inputPanel.add(new SLabel("%  "));
+                inputPanel.add(new SLabel(" %  "));
 
                 optionPane = new EditOptionPane();
                 optionPane.addActionListener(new ActionListener()
