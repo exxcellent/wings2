@@ -33,7 +33,7 @@ public interface StyleSheet extends Renderable, Serializable {
      *
      * @return All set of {@link Style}s contained in this style sheet
      */
-    Set styles();
+    Set<Style> styles();
 
     /**
      * Declares if this style sheet is final or may change during runtime.

@@ -43,6 +43,7 @@ public class Selector implements Serializable {
         return selector;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -54,6 +55,7 @@ public class Selector implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         return (selector != null ? selector.hashCode() : 0);
     }

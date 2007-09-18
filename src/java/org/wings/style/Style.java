@@ -64,7 +64,7 @@ public interface Style extends Renderable, Serializable, Cloneable {
      *
      * @return the map of CSS properties
      */
-    Map properties();
+    Map<CSSProperty, String> properties();
 
 }
 

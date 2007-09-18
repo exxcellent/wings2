@@ -242,7 +242,10 @@ public class CSSProperty implements Serializable {
 
     public final static CSSProperty Z_INDEX = new CSSProperty("z-index");
 
-    public static final Set BORDER_PROPERTIES = Collections.unmodifiableSet(new HashSet(Arrays.asList(new CSSProperty[] {
+    /**
+     * List of CSS properties which may not be applied to SComponents but their borders.
+     */
+    public static final Set<CSSProperty> BORDER_PROPERTIES = Collections.unmodifiableSet(new HashSet<CSSProperty>(Arrays.asList(
             CSSProperty.BORDER,
             //CSSProperty.BORDER_COLLAPSE,
             CSSProperty.BORDER_COLOR,
@@ -254,7 +257,7 @@ public class CSSProperty implements Serializable {
             CSSProperty.BORDER_RIGHT_STYLE, CSSProperty.BORDER_RIGHT_WIDTH, CSSProperty.BORDER_TOP,
             CSSProperty.BORDER_TOP_COLOR, CSSProperty.BORDER_TOP_STYLE, CSSProperty.BORDER_TOP_WIDTH,
             CSSProperty.PADDING, CSSProperty.PADDING_TOP, CSSProperty.PADDING_RIGHT,
-            CSSProperty.PADDING_BOTTOM, CSSProperty.PADDING_LEFT})));
+            CSSProperty.PADDING_BOTTOM, CSSProperty.PADDING_LEFT)));
 
     private final String name;
 
@@ -266,6 +269,7 @@ public class CSSProperty implements Serializable {
         return name;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -277,10 +281,12 @@ public class CSSProperty implements Serializable {
         return (name.equalsIgnoreCase(cssProperty.name));
     }
 
+    @Override
     public int hashCode() {
         return name.hashCode();
     }
 
+    @Override
     public String toString() {
         return getName();
     }

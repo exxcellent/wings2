@@ -31,7 +31,8 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
     public static final CSSAttributeSet EMPTY_ATTRIBUTESET =
             new CSSAttributeSet() {
                 private UnsupportedOperationException  doThrow() {
-                    return new UnsupportedOperationException("cannot change values for the global EMPTY_ATTRIBUTESET. You attempted to modify this unmodifiable CSSPropertySet: create your own instance of a CSSPropertySet first!");
+                    return new UnsupportedOperationException("Cannot change values for the global EMPTY_ATTRIBUTESET. " +
+                            "You attempted to modify this unmodifiable CSSPropertySet.");
                 }
 
                 public String put(String name, String value) {
@@ -44,7 +45,7 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
             };
 
     /** The map holding <code>CSSProperty</code> to <code>String</code>  */
-    private HashMap map;
+    private HashMap<CSSProperty, String> map;
 
     /** Cached String representation of this attribute set. */
     private String cachedStringRepresentation;
@@ -52,7 +53,7 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
     /**
      * create a CSSPropertySet from the given HashMap.
      */
-    private CSSAttributeSet(HashMap map) {
+    private CSSAttributeSet(HashMap<CSSProperty, String> map) {
         this.map = map;
     }
 
@@ -114,8 +115,12 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
      *
      * @return A set of {@link CSSProperty} for which this <code>CSSAttributeSet</code> contains a value.
      */
-    public final Map properties() {
-        return map != null ? Collections.unmodifiableMap(map) : Collections.EMPTY_MAP;
+    public final Map<CSSProperty, String> properties() {
+        if (map != null) {
+            return Collections.unmodifiableMap(map);
+        } else {
+            return Collections.emptyMap();
+        }
     }
 
     /**
@@ -137,7 +142,7 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
     public String put(CSSProperty name, String value) {
         cachedStringRepresentation = null;
         if (map == null) {
-            map = new HashMap(8);
+            map = new HashMap<CSSProperty, String>(8);
         }
 
         if (value == null)
@@ -153,13 +158,13 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
     public boolean putAll(CSSAttributeSet attributes) {
         cachedStringRepresentation = null;
         if (map == null)
-            map = new HashMap(8);
+            map = new HashMap<CSSProperty, String>(8);
 
         boolean changed = false;
-        for (Iterator iterator = attributes.properties().entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry)iterator.next();
-            CSSProperty property = (CSSProperty)entry.getKey();
-            changed = changed || (put(property, (String)entry.getValue()) != null);
+        for (Map.Entry<CSSProperty, String> entry1 : attributes.properties().entrySet()) {
+            Map.Entry entry = (Map.Entry) entry1;
+            CSSProperty property = (CSSProperty) entry.getKey();
+            changed = changed || (put(property, (String) entry.getValue()) != null);
         }
         return changed;
     }
@@ -182,6 +187,7 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
      *
      * @return the new set of attributes
      */
+    @Override
     public Object clone() {
         if (isEmpty()) {
             return new CSSAttributeSet();
@@ -190,17 +196,17 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
         }
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         final CSSAttributeSet that = (CSSAttributeSet)o;
 
-        if (map != null ? !map.equals(that.map) : that.map != null) return false;
-
-        return true;
+        return !(map != null ? !map.equals(that.map) : that.map != null);
     }
 
+    @Override
     public int hashCode() {
         return (map != null ? map.hashCode() : 0);
     }
@@ -256,16 +262,15 @@ public class CSSAttributeSet implements Renderable, Serializable, Cloneable {
      *
      * @return the string
      */
+    @Override
     public String toString() {
         if (cachedStringRepresentation == null) {
             final SStringBuilder builder = new SStringBuilder();
             if (map != null) {
-                Iterator names = map.entrySet().iterator();
-                while (names.hasNext()) {
-                    Map.Entry next = (Map.Entry) names.next();
-                    builder.append(next.getKey());
+                for (Map.Entry<CSSProperty, String> entry : map.entrySet()) {
+                    builder.append(entry.getKey());
                     builder.append(':');
-                    builder.append(next.getValue());
+                    builder.append(entry.getValue());
                     builder.append(';');
                 }
             }

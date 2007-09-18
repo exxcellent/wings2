@@ -31,7 +31,7 @@ public class CSSStyleSheet implements StyleSheet {
      */
     private final static Log log = LogFactory.getLog(CSSStyleSheet.class);
     
-    private static final Map lengthMapping = new HashMap();
+    private static final Map<String, Float> lengthMapping = new HashMap<String, Float>();
     static {
         lengthMapping.put("pt", new Float(1f));
         lengthMapping.put("px", new Float(1.3f));
@@ -41,13 +41,13 @@ public class CSSStyleSheet implements StyleSheet {
         lengthMapping.put("in", new Float(72f));
     }
 
-    private final Map map;
+    private final Map<Selector, Style> map;
 
     /**
      * Constructs an empty style sheet.
       */
     public CSSStyleSheet() {
-        map = new HashMap();
+        map = new HashMap<Selector, Style>();
     }
 
     /**
@@ -64,17 +64,16 @@ public class CSSStyleSheet implements StyleSheet {
         //style.setSheet(this);
     }
 
-    public Set styles() {
-        return new HashSet(map.values());
+    public Set<Style> styles() {
+        return new HashSet<Style>(map.values());
     }
 
     /**
      * Write each style in set to the device.
      */
     public void write(Device out) throws IOException {
-        Iterator iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+        for (Map.Entry<Selector, Style> entry1 : map.entrySet()) {
+            Map.Entry entry = (Map.Entry) entry1;
             ((Style) entry.getValue()).write(out);
         }
         out.flush();
@@ -190,10 +189,10 @@ public class CSSStyleSheet implements StyleSheet {
         if (lengthString == null || lengthString.length() == 0)
             return 0;
         else
-            return new Integer(lengthString).intValue();
+            return Integer.parseInt(lengthString);
     }
 
-    static int sizeMap[] = {8, 10, 12, 14, 18, 24, 36};
+    static final int sizeMap[] = {8, 10, 12, 14, 18, 24, 36};
 
     /**
      * parses the font size attribute. return -1, if no font size
@@ -298,7 +297,7 @@ public class CSSStyleSheet implements StyleSheet {
         String str = Integer.toHexString(color.getRed());
         if (str.length() > 2)
             str = str.substring(0, 2);
-        else if (str.length() < 2)
+        if (str.length() < 2)
             colorstr += "0" + str;
         else
             colorstr += str;
@@ -307,7 +306,7 @@ public class CSSStyleSheet implements StyleSheet {
         str = Integer.toHexString(color.getGreen());
         if (str.length() > 2)
             str = str.substring(0, 2);
-        else if (str.length() < 2)
+        if (str.length() < 2)
             colorstr += "0" + str;
         else
             colorstr += str;
@@ -316,7 +315,7 @@ public class CSSStyleSheet implements StyleSheet {
         str = Integer.toHexString(color.getBlue());
         if (str.length() > 2)
             str = str.substring(0, 2);
-        else if (str.length() < 2)
+        if (str.length() < 2)
             colorstr += "0" + str;
         else
             colorstr += str;
@@ -474,18 +473,14 @@ public class CSSStyleSheet implements StyleSheet {
         }
         // Absolute first
         try {
-            URL url = new URL(cssString);
-            if (url != null) {
-                return url;
-            }
+            return new URL(cssString);
         } catch (MalformedURLException mue) {
         }
         // Then relative
         if (base != null) {
             // Relative URL, try from base
             try {
-                URL url = new URL(base, cssString);
-                return url;
+                return new URL(base, cssString);
             } catch (MalformedURLException muee) {
             }
         }
@@ -550,8 +545,25 @@ public class CSSStyleSheet implements StyleSheet {
         return null;
     }
 
-    class CssParser
-            implements CSSParser.CSSParserCallback {
+    class CssParser implements CSSParser.CSSParserCallback {
+        private List<String[]> selectors = new LinkedList<String[]>();
+        private List<String> selectorTokens = new LinkedList<String>();
+        /**
+         * Name of the current property.
+         */
+        private String propertyName;
+        private CSSAttributeSet declaration = new CSSAttributeSet();
+        /** True if parsing a declaration, that is the Reader will not
+         * contain a selector. */
+        // boolean parsingDeclaration;
+        /** True if the attributes are coming from a linked/imported style. */
+        // boolean isLink;
+        /**
+         * Where the CSS stylesheet lives.
+         */
+        private URL base;
+        private CSSParser parser = new CSSParser();
+
         /**
          * Parses the passed in CSS declaration into an CSSPropertySet.
          */
@@ -670,24 +682,6 @@ public class CSSStyleSheet implements StyleSheet {
             selectors.add(selector);
             selectorTokens.clear();
         }
-
-        List selectors = new LinkedList();
-        List selectorTokens = new LinkedList();
-        /**
-         * Name of the current property.
-         */
-        String propertyName;
-        CSSAttributeSet declaration = new CSSAttributeSet();
-        /** True if parsing a declaration, that is the Reader will not
-         * contain a selector. */
-        // boolean parsingDeclaration;
-        /** True if the attributes are coming from a linked/imported style. */
-//        boolean isLink;
-        /**
-         * Where the CSS stylesheet lives.
-         */
-        URL base;
-        CSSParser parser = new CSSParser();
     }
 }
 
