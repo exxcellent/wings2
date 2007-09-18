@@ -32,6 +32,7 @@ public class Poller
             pt.addListener(listener);
         else {
             pt = new PollerTask(url);
+            //pt.setUrl(url);
             pt.addListener(listener);
             pollerTasks.add(pt);
             System.out.println("Listener Session: " + listener.getSession().toString());
@@ -70,73 +71,7 @@ public class Poller
         return null;
     }
 
-    private class PollerTask
-        extends java.util.TimerTask
-    {
-
-        private String url = "";
-        private SyndFeed lastFeed = new SyndFeedImpl();
-        private List<FeedUpdatedListener> listeners = new ArrayList<FeedUpdatedListener>();
-
-        public PollerTask(String url) {
-            super();
-            this.url = url;
-            System.out.println("New Poller Task for feed: " + url);
-        }
-
-        public String getUrl() {
-            return this.url;
-        }
-
-        public List<FeedUpdatedListener> getListeners() {
-            return listeners;
-        }
-
-        public void addListener(FeedUpdatedListener listener) {
-            if (!listeners.contains(listener))
-                listeners.add(listener);
-
-            System.out.println(listeners.size() + " Listeners for task " + this.url);
-        }
-
-        public void removeListener(FeedUpdatedListener listener) {
-            if (listeners.contains(listener))
-                listeners.remove(listener);
-
-            System.out.println(listeners.size() + " Listeners for task " + this.url);
-        }
-
-        public void run() {
-            System.out.println("Polling " + url);
-            try {
-                URL feedUrl = new URL(this.getUrl());
-                SyndFeedInput input = new SyndFeedInput();
-                SyndFeed feed = input.build(new XmlReader(feedUrl));
-
-                if (feed != lastFeed) {
-                    lastFeed = feed;
-
-                    for (FeedUpdatedListener listener : listeners) {
-                        if (listener.getSession() != null && listener.getSession().getDispatcher() != null)
-                            listener.getSession().getDispatcher().invokeLater(new FeedUpdatedEvent(feed, listener));
-                    }
-                }
-                System.out.println("Finished polling");
-            }
-            catch (java.net.MalformedURLException e1) {
-                System.out.println("MalformedURLException");
-                e1.printStackTrace();
-            }
-            catch (java.io.IOException e2) {
-                System.out.println("IOException");
-                e2.printStackTrace();
-            }
-            catch (com.sun.syndication.io.FeedException e3) {
-                System.out.println("FeedException");
-                e3.printStackTrace();
-            }
-        }
-    }
+    
 
     private class SessionExitListener
         implements SExitListener

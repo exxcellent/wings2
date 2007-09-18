@@ -30,5 +30,11 @@
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>
+    
+    <listener>
+    	<listener-class>
+    		desktop.PollerTask
+    	</listener-class>
+    </listener>
 
 </web-app>
