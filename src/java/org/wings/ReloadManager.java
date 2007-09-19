@@ -32,19 +32,19 @@ public interface ReloadManager extends Serializable {
      * Returns a (filtered) list of all updates.
      * @return a list of all needed updates
      */
-    List getUpdates();
+    List<Update> getUpdates();
 
     /**
      * Returns a set of all components marked dirty.
      * @return a set of all dirty components
      */
-    Set getDirtyComponents();
+    Set<SComponent> getDirtyComponents();
 
     /**
      * Return a set of all frames marked dirty.
      * @return a set of all dirty frames
      */
-    Set getDirtyFrames();
+    Set<SFrame> getDirtyFrames();
 
     /**
      * Invalidates all frames containing dirty components.
