@@ -23,6 +23,7 @@ import org.wings.SFrame;
  * This implementation assumes, that the granularity of separately reloadable
  * components is the frame. May be, there will be better possibilities in the
  * future - DHTML, updating the DOM with JavaScript ???
+ * Update as of 2007: The future is already here! :-) 
  */
 
 /**
