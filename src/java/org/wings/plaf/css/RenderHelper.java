@@ -44,7 +44,8 @@ public final class RenderHelper {
         return ALLOW_COMPONENT_CACHING && allowUsageOfCachedInstances == 0 &&
             !(component.getSession().getReloadManager().isUpdateMode()) &&
             !(component instanceof SContainer || component instanceof SMenu) &&
-            component.getComponentPopupMenu() == null;
+            component.getComponentPopupMenu() == null &&
+            component.getScriptListenerList().isEmpty();
     }
 
 }
