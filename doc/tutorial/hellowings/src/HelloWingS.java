@@ -1,22 +1,34 @@
-import org.wings.*;
-import java.util.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+
+import org.wings.*;
 
 public class HelloWingS {
     public HelloWingS() {
-        SGridLayout gridLayout = new SGridLayout(1);
-        SForm panel = new SForm(gridLayout);
-        SLabel titel = new SLabel("Hello World - this is wingS!");
-        SButton okButton = new SButton("Guess!");
-        titel.setFont(new SFont(null, SFont.BOLD, 18));
-        gridLayout.setVgap(10);
-
+        SFrame rootFrame = new SFrame();
+        SPanel panel = new SPanel(new SGridLayout(5, 1, 10, 10));
+        SLabel title = new SLabel("Hello wingS!\n");
+        SButton doGuess = new SButton("Guess!");
         final SLabel message = new SLabel();
         final STextField textField = new STextField();
-        final int randomNr = new Random().nextInt(10) + 1;
 
-        // check our guesses and respond with according message
-        okButton.addActionListener(new ActionListener() {
+        // arrange components using a grid layout
+        panel.add(title);
+        panel.add(new SLabel("We want fun, so let's play a game!\n" +
+                "Try to guess a number between 1 and 10."));
+        panel.add(message);
+        panel.add(textField);
+        panel.add(doGuess);
+        rootFrame.getContentPane().add(panel);
+
+        // Some formatting
+        title.setFont(new SFont("sans-serif", SFont.BOLD, 18));
+        message.setForeground(Color.RED);
+
+        // The game logic as simple Swing-Actionlistener.
+        final int randomNr = new Random().nextInt(10) + 1;
+        doGuess.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (Integer.toString(randomNr).equals(textField.getText()))
                     message.setText("Congratulations! You guessed my number!");
@@ -26,16 +38,6 @@ public class HelloWingS {
             }
         });
 
-        // arrange components using a grid layout
-        panel.add(titel);
-        panel.add(new SLabel("We want fun, so let's play a game!\n" +
-                "Try to guess a number between 1 and 10."));
-        panel.add(textField);
-        panel.add(okButton);
-        panel.add(message);
-
-        SFrame rootFrame = new SFrame();
-        rootFrame.getContentPane().add(panel);
         rootFrame.setVisible(true);
     }
 }

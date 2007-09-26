@@ -40,12 +40,11 @@ public abstract class AbstractLabelCG extends AbstractComponentCG {
             // Only quote leading/trailing whitespace
             int len = text.length();
             int off = 0;
-            
-            while ( off < len && text.charAt(off) <= ' ' ) {
+            while ( off < len && text.charAt(off) == ' ' ) {
                 off++;
                 device.print("&nbsp;");
             }
-            while ( off < len && text.charAt(len - 1) <= ' ' ) {
+            while ( off < len && text.charAt(len - 1) == ' ' ) {
                 len--;
             }
             
