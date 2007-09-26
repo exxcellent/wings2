@@ -446,6 +446,8 @@ public final class Utils {
                 d.print(chars, last, (pos - last));
                 if (c == '\n' && quoteNewline) {
                     d.print("<br>");
+                    if (pos == chars.length -1 || chars[pos + 1] == '\n') // insert &nbsp; in empty/sequence <br>s.
+                        d.print("&nbsp;");
                 }
                 else {
                     d.print("&#");

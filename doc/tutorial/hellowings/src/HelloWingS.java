@@ -7,7 +7,7 @@ import org.wings.*;
 public class HelloWingS {
     public HelloWingS() {
         SFrame rootFrame = new SFrame();
-        SPanel panel = new SPanel(new SGridLayout(5, 1, 10, 10));
+        SPanel panel = new SPanel(new SGridLayout(5, 1, 10, 5));
         SLabel title = new SLabel("Hello wingS!\n");
         SButton doGuess = new SButton("Guess!");
         final SLabel message = new SLabel();
