@@ -1,0 +1,11 @@
+<table width="100%">
+<tr height="20"><td colspan="2"><object name="controlForm"></object><hr/></td></tr>
+<tr bgcolor="#5555ff">
+   <th width="20%">Upload</th>
+   <th width="80%">Preview</th>
+</tr>
+<tr>
+    <td><object name="uploadForm"></object></td>
+    <td valign="top"><object name="previewArea"></object></td>
+</tr>
+</table>

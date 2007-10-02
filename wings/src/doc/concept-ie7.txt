@@ -1,0 +1,19 @@
+Konzept wingS rendering workover:
+
+* IE7 macht probleme aufgrund von gefixtem overflow: visible, Elemente containen nicht mehr ihren Inhalt.
+* Größe des HTML-Codes könnte verringert werden
+
+Ideen:
+
+Den PrefixAndSuffixDecorator optional renderbar machen:
+
+* prepareRenderingPipeline einführen, in der sich Komponente, PASD und LM abstimmen, welche Attribute von wem gerendert werden.
+* Wenn für den PASD keine Attribute auf der Komponente liegen, wird er nicht gerendert. Typische Attribute für den PASD sind background properties, border und cursor, da sie abhängig von der size sind. Evtl. noch tooltip, DnD und javascript listener
+* IE kann wieder Table verwenden.
+
+---------------------------------------------------------------------
+alternativ:
+
+PASD komplett entfernen und die Komponenten entscheiden lassen, wie und ob sie einen Container brauchen. Dafür table verwenden. Problemfälle sind z.B. button und label, die evtl. 2 Tables ineinander verschachteln müssen.
+
+

@@ -1,0 +1,16 @@
+Please refer to Chapter 2 in the wingS user documentation for
+a quickstart of how to setup and start to develop web applications
+with wingS
+
+In short words:
+- doc contains a user guide as well as the Java API documentation
+- doc/hellowings a very minimalistic demo
+- lib/ contains all files needed to develop and compile your wingS
+  application
+- demo/ contains a set of various demo, mainly the wings feature
+  showoff demo named WingSet
+- web/ contains files you need to deploy during runtime
+  with your wings application
+- src/ The sources needed to build the core wingS libraries
+  wings.jar and css1.jar which are only distributed in binary
+  form under the web/WEB-INF/lib directory.

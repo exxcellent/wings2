@@ -1,0 +1,26 @@
+# $Id$
+#
+# Example file for custom build propert
+#
+# COPY THIS FILE TO custom-build.properties AND ADAPT SETTINGS TO YOUR LOCAL
+# REQUREMENTS!
+#
+# Provide here a template file that user can copy and modify to adapt your settings
+
+# Use faster jikes perhaps? Requires jikes 1.15; 1.14 core dumps
+#build.compiler=jikes
+
+# Do not generate Debugging info?
+#build.debug=false
+
+# Do not show deprecation warnings?
+#build.deprecation=false
+
+# do not use the splash
+#nosplash
+
+# use log4j for the wingset demo (copy log4j.xml.example to log4j.xml and edit it)
+#log4j
+
+# The home directory of your tomcat installation for deployment
+tomcat.home=C:/Devel/jakarta-tomcat-5.5.4

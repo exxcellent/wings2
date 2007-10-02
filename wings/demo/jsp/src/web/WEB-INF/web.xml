@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+    <servlet>
+        <servlet-name>Externalizer</servlet-name>
+        <servlet-class>org.wings.jsp.ExternalizerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Externalizer</servlet-name>
+        <url-pattern>*.GIF</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Externalizer</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Externalizer</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+</web-app>

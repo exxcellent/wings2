@@ -1,0 +1,72 @@
+/*
+   $Id$
+   wings core CSS Style Sheet for gecko Browser (Mozilla, FireFox).
+
+   >> This file contains CORE CSS declarations needed for correct operation.  <<
+   >> Porting changes in this file to other browsers is REQUIRED              <<
+
+   Includes CSS definitions that are required for wings to work correctly.
+   - Please use gecko-optional.css for purely optional visual stylings
+   - Please avoid generic/global css selectors and use the wings css
+     classes in your selection path
+*/
+
+/* tables inherit certain properties from their parents. These need to be
+   defined here. This works with konq, moz, opera. */
+/* please comment on these...are they needed? */
+tr {
+    text-align: inherit;
+    vertical-align: inherit;
+}
+
+/* rounded corners for gecko */
+.STabbedPane_Tab_top {
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-topleft: 4px;
+}
+.STabbedPane_Tab_left {
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-bottomleft: 4px;
+}
+.STabbedPane_Tab_right {
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomright: 4px;
+}
+
+.STabbedPane_Tab_bottom {
+    -moz-border-radius-bottomright: 4px;
+    -moz-border-radius-bottomleft: 4px;
+}
+
+td.STabbedPane_pane {
+    height: 100%;
+}
+
+/* Apply this class to all invisible (spacer gifs)! Also ensure an alt="" tag!
+   Refer to  http://developer.mozilla.org/en/docs/Images,_Tables,_and_Mysterious_Gaps */
+img.spacer, img.nopad {
+  display: block;
+}
+
+/* this stays in here!
+   it switches the gecko-compatible browsers into border-box mode */
+/* is it still needed? (OL 6.5.2006) */
+div, input, select, textarea, table {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+/* tooltips opacity */
+div.domTT {
+    -moz-opacity: 0.8;
+}
+
+/*pre.label {
+    font-family: inherit;
+    margin: 0px;
+    padding: 0px;
+}*/
+
+.STree img {
+    margin-left: 0px;
+}

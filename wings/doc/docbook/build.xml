@@ -1,0 +1,192 @@
+<!--
+   DocBook build file adopted from Hibernate 3 project.
+
+   You can also call lang.section-check to track down missing identifiers in a particular
+   language, or you can call lang.revdiff to get a difference report for a particular
+   language, compared with the English reference.
+-->
+<project name="ReferenceDocumentation" default="all.doc" basedir=".">
+    <!-- Allow this to be overriden by others importing this project. -->
+    <dirname property="imported.basedir" file="${ant.file.ReferenceDocumentation}"/>
+
+    <!-- Set build directories for all formats. -->
+    <property name="build.dir"             value="${basedir}/build"/>
+
+    <!-- Support files for build process. -->
+    <property name="support.dir"           value="${imported.basedir}/support"/>
+
+    <!-- Set DocBook stylesheets. -->
+    <property name="db.style.fopdf"        value="fopdf.xsl"/>
+    <property name="db.style.html"         value="html_chunk.xsl"/>
+    <property name="db.style.htmlsingle"   value="html.xsl"/>
+
+    <!-- Classpath for the build tools. -->
+    <path id="lib.classpath">
+        <fileset dir="${support.dir}/lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- ################################################################## -->
+
+    <target name="all.doc"
+            depends="clean"
+            description="Compile documentation for all languages and all formats.">
+
+        <antcall target="doc.all"><param name="documentname" value="userguide"/></antcall>
+        <antcall target="doc.all"><param name="documentname" value="whitepaper"/></antcall>
+    </target>
+
+    <!-- ################################################################## -->
+
+    <target name="clean">
+
+        <!-- Delete build directory. -->
+        <delete dir="${build.dir}"/>
+
+    </target>
+
+    <target name="doc.all" depends="assert-docname-param">
+        <!-- Compile the documentation for a single language in all formats. -->
+        <antcall target="doc.pdf"/>
+        <antcall target="doc.html"/>
+        <antcall target="doc.htmlsingle"/>
+        <antcall target="doc.htmlmisc"/>
+    </target>
+
+
+    <target name="doc.pdf.prepare" depends="assert-docname-param">
+
+        <!-- Copy all the images to the output location, will be removed later. -->
+        <copy todir="${build.dir}/${documentname}/pdf/images">
+            <fileset dir="${basedir}/${documentname}/images">
+                <include name="**/*.png"/>
+                <include name="**/*.svg"/>
+                <include name="**/*.gif"/>
+				<include name="**/*.jpg"/>
+            </fileset>
+        </copy>
+
+        <!-- Create the XSL/FO temporary file. -->
+        <java classname="com.icl.saxon.StyleSheet" fork="true" dir="${basedir}" maxmemory="128m" >
+            <classpath refid="lib.classpath"/>
+            <arg value="-o"/>
+            <arg value="${build.dir}/${documentname}/pdf/docbook_fop.tmp"/>
+            <arg value="${basedir}/${documentname}/master.xml"/>
+            <arg value="${basedir}/${documentname}/styles/${db.style.fopdf}"/>
+        </java>
+
+        <available property="custom.fop.userconfig.present" file="userconfig.xml" filepath="${basedir}/${documentname}/fop"/>
+    </target>
+
+    <target name="doc.pdf.customized" depends="doc.pdf.prepare" if="custom.fop.userconfig.present">
+
+        <copy todir="${build.dir}/${documentname}/pdf">
+            <fileset dir="${basedir}/${documentname}/fop">
+                <include name="*"/>
+            </fileset>
+        </copy>
+
+        <!-- Create a PDF from the XSL/FO, using customized fop userconfig.xml -->
+        <java classname="org.apache.fop.apps.Fop" fork="true" dir="${basedir}" maxmemory="128m" >
+            <classpath refid="lib.classpath"/>
+            <arg value="-c"/>
+            <arg value="${basedir}/${documentname}/fop/userconfig.xml"/>
+            <arg value="${build.dir}/${documentname}/pdf/docbook_fop.tmp"/>
+            <arg value="${build.dir}/${documentname}/pdf/${documentname}.pdf"/>
+        </java>
+    </target>
+
+    <target name="doc.pdf.normal" depends="doc.pdf.prepare" unless="custom.fop.userconfig.present">
+        <!-- Create a PDF from the XSL/FO. -->
+        <java classname="org.apache.fop.apps.Fop" fork="true" dir="${basedir}">
+            <classpath refid="lib.classpath"/>
+            <arg value="${build.dir}/${documentname}/pdf/docbook_fop.tmp"/>
+            <arg value="${build.dir}/${documentname}/pdf/${documentname}.pdf"/>
+        </java>
+    </target>
+
+    <target name="doc.pdf" depends="doc.pdf.normal,doc.pdf.customized"
+            description="Generates the PDF documentation only for a language (set lang)">
+        <!-- House keeping,delete temporary files. -->
+        <delete>
+            <fileset dir="${build.dir}/${documentname}/pdf" excludes="**/*.pdf"/>
+        </delete>
+        <delete  dir="${build.dir}/${documentname}/pdf/images"/>
+    </target>
+
+    <target name="doc.html" depends="assert-docname-param, doc.htmlmisc"
+            description="Generates the HTML documentation only for a language (set lang)">
+
+        <mkdir dir="${build.dir}/${documentname}/html/"/>
+		
+        <java classname="com.icl.saxon.StyleSheet" fork="true" dir="${build.dir}/${documentname}/html">
+            <classpath refid="lib.classpath"/>
+            <arg value="${basedir}/${documentname}/master.xml"/>
+            <arg value="${basedir}/${documentname}/styles/${db.style.html}"/>
+        </java>
+		
+		<replace dir="${build.dir}/${documentname}/html/">
+	      <include name="**/*.html"/>
+	      <replacetoken>src="images</replacetoken>
+		  <replacevalue>src="../shared/images</replacevalue>
+	    </replace>
+		
+    </target>
+
+    <target name="doc.htmlsingle" depends="assert-docname-param, doc.htmlmisc"
+        description="Generates the single-page HTML documentation only for a language (set lang)">
+
+        <mkdir dir="${build.dir}/${documentname}/html_single/"/>
+		
+        <java classname="com.icl.saxon.StyleSheet" fork="true" dir="${basedir}">
+            <classpath refid="lib.classpath"/>
+            <arg value="-o"/>
+            <arg value="${build.dir}/${documentname}/html_single/index.html"/>
+            <arg value="${basedir}/${documentname}/master.xml"/>
+            <arg value="${basedir}/${documentname}/styles/${db.style.htmlsingle}"/>
+        </java>
+		
+		<replace dir="${build.dir}/${documentname}/html_single/">
+	      <include name="**/*.html"/>
+	      <replacetoken>src="images</replacetoken>
+		  <replacevalue>src="../shared/images</replacevalue>
+	    </replace>
+		
+    </target>
+
+    <target name="doc.htmlmisc" depends="assert-docname-param">
+        <!-- Copy images and CSS for HTML documentation, language specific. -->
+        <copy todir="${build.dir}/${documentname}/shared/images">
+            <fileset dir="${basedir}/${documentname}/images">
+                <include name="**/*.png"/>
+                <include name="**/*.gif"/>
+				<include name="**/*.jpg"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.dir}/${documentname}/shared/css">
+            <fileset dir="${basedir}/${documentname}/styles">
+                <include name="**/*.css"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    
+    <target name="doc.section-check" depends="doc.html"
+            description="Reports missing unique chapter/section identifiers (set lang)">
+        <java classname="com.icl.saxon.StyleSheet" fork="true" dir="${build.dir}/${documentname}/html">
+            <classpath refid="lib.classpath"/>
+            <arg value="${basedir}/${documentname}/master.xml"/>
+            <arg value="${support.dir}/section-check.xsl"/>
+        </java>
+    </target>
+
+    <target name="assert-docname-param" unless="documentname">
+        <fail>This target requires the documentname as parameter!
+  Try to call this target like 'ant (targetname) -Ddocumentname=(documentname)'.
+  Currently known document names are 'whitepaper' and 'userguide'.
+        </fail>
+    </target>
+
+</project>

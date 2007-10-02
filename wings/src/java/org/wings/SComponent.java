@@ -1,0 +1,1976 @@
+/*
+ * Copyright 2000,2005 wingS development team.
+ *
+ * This file is part of wingS (http://www.j-wings.org).
+ *
+ * wingS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ *
+ * Please see COPYING for the complete licence.
+ */
+package org.wings;
+
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wings.border.SBorder;
+import org.wings.event.SComponentEvent;
+import org.wings.event.SComponentListener;
+import org.wings.event.SParentFrameEvent;
+import org.wings.event.SParentFrameListener;
+import org.wings.event.SRenderEvent;
+import org.wings.event.SRenderListener;
+import org.wings.io.Device;
+import org.wings.plaf.ComponentCG;
+import org.wings.script.ScriptListener;
+import org.wings.session.Session;
+import org.wings.session.SessionManager;
+import org.wings.style.CSSAttributeSet;
+import org.wings.style.CSSProperty;
+import org.wings.style.CSSStyle;
+import org.wings.style.CSSStyleSheet;
+import org.wings.style.Selector;
+import org.wings.style.Style;
+import org.wings.util.ComponentVisitor;
+import org.wings.util.SStringBuilder;
+
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Object having a graphical representation that can be displayed on the
+ * screen and that can interact with the user.
+ *
+ * @author <a href="mailto:haaf@mercatis.de">Armin Haaf</a>
+ */
+public abstract class SComponent implements Cloneable, Serializable, Renderable {
+
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+
+    private static final Log log = LogFactory.getLog(SComponent.class);
+
+    private static final int ACTION_CONDITIONS_AMOUNT = 2;
+
+    /* Components unique name. */
+    private String name;
+
+    /**
+     * the session
+     */
+    private transient Session session;
+
+    /**
+     * The code generation delegate, which is responsible for
+     * the visual representation of this component.
+     */
+    private transient ComponentCG cg;
+
+    /**
+     * Vertical alignment
+     */
+    private int verticalAlignment = SConstants.NO_ALIGN;
+
+    /**
+     * Horizontal alignment
+     */
+    private int horizontalAlignment = SConstants.NO_ALIGN;
+
+    /**
+     * The name of the style class
+     */
+    private String style;
+
+    /**
+     * Map of {@link Selector} to CSS {@link Style}s currently assigned to this component.
+     */
+    protected Map dynamicStyles;
+
+    /**
+     * Visibility of the component.
+     */
+    protected boolean visible = true;
+
+    /**
+     * Enabled / disabled.
+     */
+    private boolean enabled = true;
+
+    /**
+     * The container, this component resides in.
+     */
+    private SContainer parent;
+
+    /**
+     * The frame in which this component resides.
+     */
+    private SFrame parentFrame;
+
+    /**
+     * The border for the component.
+     */
+    private SBorder border;
+
+    /**
+     * The tooltip for this component.
+     */
+    private String tooltip;
+
+    /**
+     * The focus traversal Index
+     */
+    private int focusTraversalIndex = -1;
+
+    /**
+     * Preferred size of component in pixel.
+     */
+    private SDimension preferredSize;
+
+    /**
+     * This is for performance optimizations. With this flag is set, property change
+     * events are generated and so every property setter method has to test if a property
+     * has changed and temporarily store the old value to generate the property
+     * change event
+     */
+    private boolean fireComponentChangeEvents = false;
+
+    /**
+     * Generate and fire {@link SParentFrameEvent}s. Performace optimitation
+     */
+    private boolean fireParentFrameChangeEvents = false;
+
+    /**
+     * Flag indiccating if {@link SRenderEvent}s should be fired. Used for performace reasons
+     */
+    private boolean fireRenderEvents = false;
+
+    /**
+     * All event listeners of this component
+     */
+    private EventListenerList listeners;
+
+    private Boolean useNamedEvents;
+
+    private boolean showAsFormComponent = true;
+
+    private SPopupMenu popupMenu;
+
+    /*private boolean inheritsPopupMenu;*/
+
+    private InputMap[] inputMaps;
+
+    /**
+     * Contains all script listeners of the component.
+     */
+    private final List scriptListenerList = new LinkedList();
+
+    private ActionMap actionMap;
+
+    private final Map actionEvents = new HashMap();
+
+    private transient SRenderEvent renderEvent;
+
+    private SParentFrameListener globalInputMapListener;
+
+
+    /**
+     * Internal constants for {@link #fireRenderEvent(int)}
+     */
+    public static final int START_RENDERING = 1;
+
+    /**
+     * Internal constants for {@link #fireRenderEvent(int)}
+     */
+    public static final int DONE_RENDERING = 2;
+
+    /**
+     * Constants for conditions on which actions are triggered. Mainly two
+     * cases: the focus has either to be at the component (or at a child)
+     * or somewhere in the parent frame.
+     *
+     * @see #setInputMap(int, javax.swing.InputMap)
+     */
+    public static final int WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT = 0;
+
+    /**
+     * Constants for conditions on which actions are triggered. Mainly two
+     * cases: the focus has either to be at the component (or at a child)
+     * or somewhere in the parent frame.
+     *
+     * @see #setInputMap(int, javax.swing.InputMap)
+     */
+    public static final int WHEN_IN_FOCUSED_FRAME = 1;
+    public static final Selector SELECTOR_ALL = new Selector("everything");
+
+
+    /**
+     * Default empty constructor.
+     * The method updateCG is called during construction time to get a cg delegate installed (renderer).
+     */
+    public SComponent() {
+        updateCG();
+    }
+
+    /**
+     * Returns the border of this component or null if no border has been set.
+     *
+     * @return the border object
+     * @see #setBorder(SBorder)
+     */
+    public SBorder getBorder() {
+        return border;
+    }
+
+    /**
+     * Sets the border for this component.
+     *
+     * @param border the border to be set for the component
+     */
+    public void setBorder(SBorder border) {
+        reloadIfChange(this.border, border, ReloadManager.STATE + ReloadManager.STYLE);
+        if (this.border != null)
+            this.border.setComponent(null);
+        this.border = border;
+        if (this.border != null)
+            this.border.setComponent(this);
+    }
+
+    /**
+     * Return the parent container.
+     *
+     * @return the container this component resides in
+     */
+    public final SContainer getParent() {
+        return parent;
+    }
+
+    /**
+     * Sets the parent container. Also gets the parent frame from the parent.
+     *
+     * @param parent the container
+     */
+    public void setParent(SContainer parent) {
+        this.parent = parent;
+        if (parent != null)
+            setParentFrame(parent.getParentFrame());
+        else
+            setParentFrame(null);
+    }
+
+    /**
+     * Sets the parent frame.
+     *
+     * @param parentFrame the frame
+     */
+    protected void setParentFrame(SFrame parentFrame) {
+        if (this.parentFrame == parentFrame) {
+            return;
+        }
+
+        if (this.parentFrame != null) {
+            unregister();
+            fireParentFrameEvent(new SParentFrameEvent(this, SParentFrameEvent.PARENTFRAME_REMOVED, this.parentFrame));
+        }
+
+        this.parentFrame = parentFrame;
+
+        if (this.parentFrame != null) {
+            register();
+            // notify the listeners...
+            fireParentFrameEvent(new SParentFrameEvent(this, SParentFrameEvent.PARENTFRAME_ADDED, this.parentFrame));
+        }
+
+        if (this.popupMenu != null) {
+            popupMenu.setParentFrame(parentFrame);
+        }
+
+        //reload(ReloadManager.STATE);
+        if (getScriptListeners().length > 0)
+            reload(ReloadManager.SCRIPT);
+        if (dynamicStyles != null && dynamicStyles.size() > 0)
+            reload(ReloadManager.STYLE);
+    }
+
+    /*public void setInheritsPopupMenu(boolean inheritsPopupMenu) {
+        reloadIfChange(this.inheritsPopupMenu, inheritsPopupMenu);
+        this.inheritsPopupMenu = inheritsPopupMenu;
+    }
+
+    public boolean getInheritsPopupMenu() {
+        return inheritsPopupMenu;
+    }*/
+
+    public void setComponentPopupMenu(SPopupMenu popupMenu) {
+        reloadIfChange(this.popupMenu, popupMenu, ReloadManager.STATE);
+        if (this.popupMenu != null)
+            this.popupMenu.setParentFrame(null);
+        this.popupMenu = popupMenu;
+        if (this.popupMenu != null)
+            this.popupMenu.setParentFrame(getParentFrame());
+    }
+
+    public SPopupMenu getComponentPopupMenu() {
+        /* (OL) we probably don't need the recursive stuff here... */
+//        if (!getInheritsPopupMenu())
+//            return popupMenu;
+//
+//        if (popupMenu == null) {
+//            // Search parents for its popup
+//            SContainer parent = getParent();
+//            while (parent != null) {
+//                if (parent instanceof SComponent) {
+//                    return ((SComponent) parent).getComponentPopupMenu();
+//                }
+//                if (parent instanceof SFrame)
+//                    break;
+//
+//                parent = parent.getParent();
+//            }
+//            return null;
+//        }
+        return popupMenu;
+    }
+
+    /*  No reason -- even JComponent does not define such a method.
+        Undo change also in DynamicScriptResource.visit().
+    public boolean hasComponentPopupMenu() {
+        return popupMenu != null;
+    } */
+
+    /**
+     * The URL under which this component is accessible for the browser.
+     * This is equivalent to the URL of the component's root frame, as this is the
+     * node externalized to the browser via the {@link org.wings.resource.DynamicCodeResource}
+     * externalizer.
+     *
+     * @return The HTTP URL where this component can be accessed.
+     */
+    public RequestURL getRequestURL() {
+        SFrame p = getParentFrame();
+        if (p == null)
+            throw new IllegalStateException("no parent frame");
+
+        return p.getRequestURL();
+    }
+
+    /**
+     * Set the preferred size of the receiving component in pixel.
+     * It is not guaranteed that the component accepts this property because of
+     * missing implementations in the component cg or html properties.
+     * If <i>width</i> or <i>height</i> is zero, it is ignored and the browser
+     * defines the size.
+     *
+     * @see org.wings.SComponent#getPreferredSize
+     */
+    public void setPreferredSize(SDimension preferredSize) {
+        reloadIfChange(this.preferredSize, preferredSize, ReloadManager.STATE);
+        this.preferredSize = preferredSize;
+    }
+
+    /**
+     * Get the preferred size of this component.
+     *
+     * @see SComponent#setPreferredSize
+     */
+    public SDimension getPreferredSize() {
+        return preferredSize;
+    }
+
+
+    /**
+     * Adds the specified component listener to receive component events from
+     * this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#removeComponentListener
+     */
+    public final void addComponentListener(SComponentListener l) {
+        addEventListener(SComponentListener.class, l);
+        fireComponentChangeEvents = true;
+    }
+
+    /**
+     * Removes the specified component listener so that it no longer
+     * receives component events from this component. This method performs
+     * no function, nor does it throw an exception, if the listener
+     * specified by the argument was not previously added to this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#addComponentListener
+     */
+    public final void removeComponentListener(SComponentListener l) {
+        removeEventListener(SComponentListener.class, l);
+    }
+
+    /**
+     * Registers a "parent frame listener" to receive events from
+     * this component when the parent frame chanegs i.e. via {@link #setParentFrame(SFrame)}.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the parent frame listener. May be <code>null</code>.
+     * @see org.wings.event.SParentFrameEvent
+     * @see org.wings.event.SParentFrameListener
+     * @see org.wings.SComponent#removeParentFrameListener
+     * @see SComponent#removeNotify()
+     * @see SComponent#addNotify()
+     */
+    public final void addParentFrameListener(SParentFrameListener l) {
+        addEventListener(SParentFrameListener.class, l);
+        fireParentFrameChangeEvents = true;
+    }
+
+    /**
+     * Removes the specified parent frame listener so that it no longer
+     * receives events from this component. This method performs
+     * no function, nor does it throw an exception, if the listener
+     * specified by the argument was not previously added to this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param l the parent frame listener.
+     * @see org.wings.event.SParentFrameEvent
+     * @see org.wings.event.SParentFrameListener
+     * @see org.wings.SComponent#addParentFrameListener
+     * @see SComponent#removeNotify()
+     * @see SComponent#addNotify()
+     */
+    public final void removeParentFrameListener(SParentFrameListener l) {
+        removeEventListener(SParentFrameListener.class, l);
+    }
+
+    /**
+     * Reports a component change.
+     *
+     * @param aEvent report this event to all listeners
+     * @see org.wings.event.SComponentListener
+     */
+    protected void fireComponentChangeEvent(SComponentEvent aEvent) {
+        // maybe the better way to do this is to user the getListenerList
+        // and iterate through all listeners, this saves the creation of
+        // an array but it must cast to the apropriate listener
+        Object[] listeners = getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == SComponentListener.class) {
+                // Lazily create the event:
+                processComponentEvent((SComponentListener) listeners[i + 1],
+                        aEvent);
+            }
+        }
+
+    }
+
+    /**
+     * Reports a parent frame change.
+     *
+     * @param aEvent report this event to all listeners
+     * @see org.wings.event.SParentFrameListener
+     */
+    private void fireParentFrameEvent(SParentFrameEvent aEvent) {
+        // are listeners registered?
+        if (fireParentFrameChangeEvents) {
+            // maybe the better way to do this is to user the getListenerList
+            // and iterate through all listeners, this saves the creation of
+            // an array but it must cast to the apropriate listener
+            Object[] listeners = getListenerList();
+            for (int i = listeners.length - 2; i >= 0; i -= 2) {
+                if (listeners[i] == SParentFrameListener.class) {
+                    // Lazily create the event:
+                    processParentFrameEvent((SParentFrameListener) listeners[i + 1],
+                            aEvent);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Processes parent frame events occurring on this component by
+     * dispatching them to any registered
+     * <code>SParentFrameListener</code> objects.
+     * <p/>
+     */
+    private void processParentFrameEvent(SParentFrameListener listener, SParentFrameEvent event) {
+        int id = event.getID();
+        switch (id) {
+            case SParentFrameEvent.PARENTFRAME_ADDED:
+                listener.parentFrameAdded(event);
+                break;
+            case SParentFrameEvent.PARENTFRAME_REMOVED:
+                listener.parentFrameRemoved(event);
+                break;
+        }
+    }
+
+    /**
+     * Processes component events occurring on this component by
+     * dispatching them to any registered
+     * <code>SComponentListener</code> objects.
+     * <p/>
+     * This method is not called unless component events are
+     * enabled for this component. Component events are enabled
+     * when one of the following occurs:
+     * <p><ul>
+     * <li>A <code>SComponentListener</code> object is registered
+     * via <code>addComponentListener</code>.
+     * </ul>
+     *
+     * @param e the component event.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#addComponentListener
+     */
+    protected void processComponentEvent(SComponentListener listener, SComponentEvent e) {
+        int id = e.getID();
+        switch (id) {
+            case SComponentEvent.COMPONENT_RESIZED:
+                listener.componentResized(e);
+                break;
+            case SComponentEvent.COMPONENT_MOVED:
+                listener.componentMoved(e);
+                break;
+            case SComponentEvent.COMPONENT_SHOWN:
+                listener.componentShown(e);
+                break;
+            case SComponentEvent.COMPONENT_HIDDEN:
+                listener.componentHidden(e);
+                break;
+        }
+    }
+
+    /**
+     * Adds the specified component listener to receive component events from
+     * this component.
+     * If l is null, no exception is thrown and no action is performed.
+     * If there is already a ScriptListener which is equal, the new one is not
+     * added.
+     *
+     * @param listener the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#removeComponentListener
+     */
+    public final void addScriptListener(ScriptListener listener) {
+        if (scriptListenerList.contains(listener))
+            return;
+
+        int placingPosition = -1;
+        for (int i = 0; i < scriptListenerList.size() && placingPosition < 0; i++) {
+            ScriptListener existingListener = (ScriptListener) scriptListenerList.get(i);
+            if (existingListener.getPriority() < listener.getPriority())
+                placingPosition = i;
+        }
+        reload(ReloadManager.STATE | ReloadManager.SCRIPT);
+        if (placingPosition >= 0)
+            scriptListenerList.add(placingPosition, listener);
+        else
+            scriptListenerList.add(listener);
+    }
+
+
+    /**
+     * Removes the specified component listener so that it no longer
+     * receives component events from this component. This method performs
+     * no function, nor does it throw an exception, if the listener
+     * specified by the argument was not previously added to this component.
+     * If l is null, no exception is thrown and no action is performed.
+     *
+     * @param listener the component listener.
+     * @see org.wings.event.SComponentEvent
+     * @see org.wings.event.SComponentListener
+     * @see org.wings.SComponent#addComponentListener
+     */
+    public final void removeScriptListener(ScriptListener listener) {
+        scriptListenerList.remove(listener);
+        reload(ReloadManager.SCRIPT);
+    }
+
+    /**
+     * returns the script listeners of this component
+     *
+     * @return the ScriptListener Array.
+     */
+    public ScriptListener[] getScriptListeners() {
+        return (ScriptListener[]) scriptListenerList.toArray(new ScriptListener[scriptListenerList.size()]);
+    }
+
+    /**
+     * Returns the script listeners of this component.
+     *
+     * @return The <code>ScriptListener</code>s in a <code>List</code>.
+     */
+    public List getScriptListenerList() {
+        return Collections.unmodifiableList(scriptListenerList);
+    }
+
+    /**
+     * Sets the name property of a component which must be <b>unique</b>!
+     * <br/>Assigning the same name multiple times will cause strange results!
+     * <p/>
+     * <p>Valid names must begin with a letter ([A-Za-z]), underscores ("_") or dollars ("$") and may be followed by any number of
+     * letters, digits ([0-9]), underscores ("_") and dollars ("$")
+     * <p/>
+     * <p>If no name is set, it is generated when necessary.
+     * <p/>
+     * <p><i>Explanation:</i> This property is an identifier which is used inside the generated HTML as an element identifier (id="")
+     * and sometimes as a javascript function name.
+     *
+     * @param uniqueName A <b>unique</b> name to set. <b>Only valid identifier as described are allowed!</b>
+     * @see Character
+     */
+    public void setName(String uniqueName) {
+        if (uniqueName != null) {
+            char ch = uniqueName.charAt(0);
+            if (uniqueName.length() == 0 || !(Character.isLetter(ch) || ch == '_' || ch == '$'))
+                throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
+            for (int i = 1; i < uniqueName.length(); i++) {
+                ch = uniqueName.charAt(i);
+                if (!(Character.isLetter(ch) || Character.isDigit(ch) || ch == '_' || ch == '$'))
+                    throw new IllegalArgumentException(uniqueName + " is not a valid identifier");
+            }
+        }
+        setNameRaw(uniqueName);
+    }
+
+    /**
+     * <b>Direct setter for name. Do not use unless you explicitly know what you're doing!</b>
+     * (Former package) protected raw setter for component name to avoid sanity check.
+     *
+     * @param uncheckedName String to use as componentn name/identifier.
+     */
+    public void setNameRaw(String uncheckedName) {
+        reloadIfChange(this.name, uncheckedName, ReloadManager.STATE);
+        this.name = uncheckedName;
+    }
+
+    /**
+     * Gets the name property of a component. This property is an identifier,so it should be always unique.
+     * For details refer to {@link #setName(String)}
+     *
+     * @return The name of the component.
+     */
+    public final String getName() {
+        if (name == null)
+            name = getSession().createUniqueId();
+        return name;
+    }
+
+    /**
+     * Return the session this component belongs to.
+     *
+     * @return the session
+     */
+    public final Session getSession() {
+        if (session == null) {
+            session = SessionManager.getSession();
+        }
+
+        return session;
+    }
+
+    /*
+     * If a subclass implements the {@link LowLevelEventListener} interface,
+     * it will be unregistered at the associated dispatcher.
+     */
+    final void unregister() {
+        if (getSession().getDispatcher() != null && this instanceof LowLevelEventListener) {
+            getSession().getDispatcher().unregister((LowLevelEventListener) this);
+        }
+    }
+
+    /*
+     * If a subclass implements the {@link LowLevelEventListener} interface,
+     * it will be registered at the associated dispatcher.
+     */
+    final void register() {
+        if (getSession().getDispatcher() != null && this instanceof LowLevelEventListener) {
+            getSession().getDispatcher().register((LowLevelEventListener) this);
+        }
+    }
+
+    /**
+     * Set an CSS class name provided by the laf-provided Cascading Style Sheet (CSS), which should
+     * be applied to this component.
+     * <p/>
+     * <p>By <b>default</b> this is set to the wingS component class name (i.e. "SLabel").
+     * <p/>
+     * <p>The PLAFs render the value of this String to an <code>class="<i>cssClassName</i>"</code> attribute
+     * inside the generated HTML code of this component.
+     * <p/>
+     * <p>The default wingS plaf initializes this by default to the wingS component class name
+     * (i.e. <code>SButton</code> for button instances). <br/>Please be aware if you <b>replace</b> this
+     * default value, the default wingS style will no longer take effect, as they operate on these
+     * default styles. To avoid this you should append your CSS styles via spaces i.e.<br>
+     * <code>c.setStyle(c.getStyle + "myStyle");</code>
+     *
+     * @param cssClassName The new CSS name value for this component
+     */
+    // <p>Please consider using {@link #addStyle(String)} to avoid disabling of default wingS stylesheet set.
+    public void setStyle(String cssClassName) {
+        reloadIfChange(style, cssClassName, ReloadManager.STATE);
+        this.style = cssClassName;
+    }
+
+    /**
+     * @return The current CSS style class name. Defaults to the unqualified wingS component class name.
+     * @see #setStyle(String)
+     */
+    public String getStyle() {
+        return style;
+    }
+
+
+    /**
+     * Register a new CSS style on this component for a specfic CSS selector.
+     * <p>Typically you will want to use the method {@link #setAttribute(org.wings.style.CSSProperty, String)}
+     * to specify a single CSS property/value pair on this component.
+     *
+     * @param style A Style instance.
+     */
+    public void addDynamicStyle(Style style) {
+        if (dynamicStyles == null)
+            dynamicStyles = new HashMap(4);
+        dynamicStyles.put(style.getSelector(), style);
+        reload(ReloadManager.STYLE);
+    }
+
+    /**
+     * Remove all CSS style definitions defined for the passed CSS selector.
+     *
+     * @param selector The selector. The default selector for most CSS attributes is {@link #SELECTOR_ALL}.
+     */
+    public void removeDynamicStyle(Selector selector) {
+        if (dynamicStyles == null)
+            return;
+        dynamicStyles.remove(selector);
+        reload(ReloadManager.STYLE);
+    }
+
+    /**
+     * Returns the style defined for the passed CSS selector.
+     *
+     * @param selector The CSS selector the style to retrieve. See {@link org.wings.style.Style#getSelector()}.
+     *         The default selector for most CSS styles is {@link #SELECTOR_ALL}.
+     * @return A style (collection of css property/value pairs) or <code>null</code>
+     */
+    public Style getDynamicStyle(Selector selector) {
+        if (dynamicStyles == null)
+            return null;
+        return (Style) dynamicStyles.get(selector);
+    }
+
+    /**
+     * Adds the passed collection of {@link Style} definitions. Existing Styles for the same CSS selectors
+     * (see {@link org.wings.style.Style#getSelector()}) are overwritten.
+     *
+     * @param dynamicStyles A collection collection of {@link Style} definitions.
+     */
+    public void setDynamicStyles(Collection dynamicStyles) {
+        if (dynamicStyles == null)
+            return;
+        if (this.dynamicStyles == null)
+            this.dynamicStyles = new HashMap(4);
+        for (Iterator iterator = dynamicStyles.iterator(); iterator.hasNext();) {
+            Style style = (Style) iterator.next();
+            this.dynamicStyles.put(style.getSelector(), style);
+        }
+        reload(ReloadManager.STYLE);
+    }
+
+    /**
+     * Returns the collection of currently defined CSS styles on this component.
+     *
+     * @return A unmodifyable collection of {@link Style} instances.
+     */
+    public Collection getDynamicStyles() {
+        if (dynamicStyles == null || dynamicStyles.size() == 0)
+            return null;
+        return Collections.unmodifiableCollection(dynamicStyles.values());
+    }
+
+    /**
+     * Defines a free text css property / value pair to this component.
+     * The CSS property will appear as an inline style in the generated HTML code.
+     *
+     * @deprecated Use {@link #setAttribute(org.wings.style.CSSProperty, String)}
+     */
+    public void setAttribute(String cssPropertyName, String value) {
+        CSSProperty property = new CSSProperty(cssPropertyName);
+        if (CSSProperty.BORDER_PROPERTIES.contains(property))
+            throw new IllegalArgumentException("Border properties have to be applied to the border!");
+        setAttribute(SELECTOR_ALL, property, value);
+    }
+
+    /**
+     * Assign or overwrite a CSS property/value pair on this component. This CSS property definition will
+     * use a CSS selector which adresses this component as whole as CSS selector (<code>new CSSProperty(this)</code>).
+     * The CSS property will appear as an inline style in the generated HTML code.
+     *
+     * @param property      The CSS property (i.e. {@link CSSProperty#BACKGROUND}).
+     * @param propertyValue A valid string value for this CSS property (i.e. <code>red</code> or <code>#fff</code> in our example).
+     */
+    public void setAttribute(CSSProperty property, String propertyValue) {
+        if (CSSProperty.BORDER_PROPERTIES.contains(property))
+            throw new IllegalArgumentException("Border properties have to be applied to the border!");
+        setAttribute(SELECTOR_ALL, property, propertyValue);
+    }
+
+    /**
+     * Assign or overwrite a CSS property/value pair at this component. This CSS property definition will
+     * use the CSS selector you passed, so in the most exotic case it could affect a totally different
+     * component or component area. Typically you use this method to assign CSS property values to
+     * pseudo CSS selectors {@link Selector}. This are selector affecting only a part of a component
+     * and not the component at all..
+     * The CSS property will appear as an inline style in the generated HTML code.
+     *
+     * @param selector A valid CSS selector. Typically values are i.e. the {@link #SELECTOR_ALL}
+     * or other <code>SELECTOR_xxx</code> value instances declared in the component.
+     * (look ie. at {@link STabbedPane#SELECTOR_CONTENT}) or manually constructed instances of
+     * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
+     * choice.
+     * @param property The css property you want to define a value for
+     * @param propertyValue A valid string value for this property.
+     */
+    public void setAttribute(Selector selector, CSSProperty property, String propertyValue) {
+        Style style = getDynamicStyle(selector);
+        if (style == null) {
+            addDynamicStyle(new CSSStyle(selector, property, propertyValue));
+        } else {
+            String old = style.put(property, propertyValue);
+            reloadIfChange(old, propertyValue, ReloadManager.STYLE);
+        }
+    }
+
+    /**
+     * Convenience variant of {@link #setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}.
+     * Converts the passed icon into a URL and applies the according CSS style.
+     *
+     * @param selector A valid CSS selector. Typically values are i.e. the {@link #SELECTOR_ALL}
+     * or other <code>SELECTOR_xxx</code> value instances declared in the component.
+     * (look ie. at {@link STabbedPane#SELECTOR_CONTENT}) or manually constructed instances of
+     * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
+     * choice.
+     * @param property The css property you want to define a value for (in this case
+     *                 mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
+     * @param icon     The icon you want to assign.
+     */
+    public void setAttribute(Selector selector, CSSProperty property, SIcon icon) {
+        setAttribute(selector, property, icon != null ? "url('" + icon.getURL().toString() + "')" : "none");
+    }
+
+    /**
+     * Convenience variant of {@link #setAttribute(org.wings.style.Selector, org.wings.style.CSSProperty, String)}.
+     * Converts the passed color into according color string.
+     *
+     * @param selector A valid CSS selector. Typically values are i.e. the {@link #SELECTOR_ALL}
+     * or other <code>SELECTOR_xxx</code> value instances declared in the component.
+     * (look ie. at {@link STabbedPane#SELECTOR_CONTENT}) or manually constructed instances of
+     * <code>Selector</code>. In most case {@link #setAttribute(org.wings.style.CSSProperty, String)} will be your
+     * choice.
+     * @param property The css property you want to define a value for (in this case
+     *                 mostly something like {@link CSSProperty#BACKGROUND_IMAGE}.
+     * @param color    The color value you want to assign.
+     */
+    public void setAttribute(Selector selector, CSSProperty property, Color color) {
+        setAttribute(selector, property, CSSStyleSheet.getAttribute(color));
+    }
+
+    public void setAttributes(Selector selector, CSSAttributeSet attributes) {
+        Style style = getDynamicStyle(selector);
+        if (style == null) {
+            addDynamicStyle(new CSSStyle(selector, attributes));
+        } else {
+            boolean changed = style.putAll(attributes);
+            if (changed)
+                reload(ReloadManager.STYLE);
+        }
+    }
+
+    /**
+     * Returns the current background color of this component.
+     *
+     * @return The current background color or <code>null</code>
+     */
+    public Color getBackground() {
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getBackground((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
+    }
+
+    /**
+     * Set the components foreground color.
+     *
+     * @param color the new foreground color or <code>null</code>
+     */
+    public void setBackground(Color color) {
+        setAttribute(SELECTOR_ALL, CSSProperty.BACKGROUND_COLOR, CSSStyleSheet.getAttribute(color));
+    }
+
+    /**
+     * Return the components foreground color.
+     *
+     * @return the foreground color or <code>null</code>
+     */
+    public Color getForeground() {
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getForeground((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
+    }
+
+    /**
+     * Set the foreground color.
+     *
+     * @param color the new foreground color or <code>null</code>
+     */
+    public void setForeground(Color color) {
+        setAttribute(SELECTOR_ALL, CSSProperty.COLOR, CSSStyleSheet.getAttribute(color));
+    }
+
+    /**
+     * Set the font.
+     *
+     * @param font the new font
+     */
+    public void setFont(SFont font) {
+        CSSAttributeSet attributes = CSSStyleSheet.getAttributes(font);
+        Style style = getDynamicStyle(SELECTOR_ALL);
+        if (style == null) {
+            addDynamicStyle(new CSSStyle(SELECTOR_ALL, attributes));
+        }
+        else {
+            style.remove(CSSProperty.FONT);
+            style.remove(CSSProperty.FONT_FAMILY);
+            style.remove(CSSProperty.FONT_SIZE);
+            style.remove(CSSProperty.FONT_STYLE);
+            style.remove(CSSProperty.FONT_WEIGHT);
+            style.putAll(attributes);
+        }
+    }
+
+    /**
+     * Return the font used inside this component.
+     *
+     * @return The current font declaration or <code>null</code>
+     */
+    public SFont getFont() {
+        return dynamicStyles == null || dynamicStyles.get(SELECTOR_ALL) == null ? null : CSSStyleSheet.getFont((CSSAttributeSet) dynamicStyles.get(SELECTOR_ALL));
+    }
+
+    /**
+     * Set the visibility.
+     *
+     * @param visible wether this component will show or not
+     */
+    public void setVisible(boolean visible) {
+        boolean old = this.visible;
+        this.visible = visible;
+        if (visible != old) {
+            if (fireComponentChangeEvents) {
+                fireComponentChangeEvent(new SComponentEvent(this, visible
+                        ? SComponentEvent.COMPONENT_SHOWN
+                        : SComponentEvent.COMPONENT_HIDDEN));
+            }
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Return the visibility. If the Component has a parent which is invisible,
+     * this method returns an invisible status.
+     *
+     * @return wether the component will show
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * Return the visibility. If the Component has a parent which is invisible,
+     * this method returns an invisible status.
+     *
+     * @return wether the component will show
+     */
+    public boolean isRecursivelyVisible() {
+        return visible && (parent == null || parent.isRecursivelyVisible());
+    }
+
+    /**
+     * Set wether this component should be enabled.
+     *
+     * @param enabled true if the component is enabled, false otherwise
+     */
+    public void setEnabled(boolean enabled) {
+        reloadIfChange(this.enabled, enabled);
+        this.enabled = enabled;
+    }
+
+    /**
+     * Return true if this component is enabled.
+     *
+     * @return true if component is enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * Mark the component as subject to reload.
+     * The component will be registered with the ReloadManager.
+     *
+     * @param aspect
+     */
+    public final void reload(int aspect) {
+        getSession().getReloadManager().reload(this, aspect);
+    }
+
+    protected final void reloadIfChange(Object oldVal, Object newVal) {
+        reloadIfChange(oldVal, newVal, ReloadManager.STATE);
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     * @param aspect
+     */
+    protected final void reloadIfChange(Object oldVal, Object newVal, int aspect) {
+        if (!((oldVal == newVal) || (oldVal != null && oldVal.equals(newVal)))) {
+            //System.err.println(getClass().getDescription() + ": reload. old:" + oldVal + "; new: "+ newVal);
+            reload(aspect);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(int oldVal, int newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(boolean oldVal, boolean newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(byte oldVal, byte newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(short oldVal, short newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(long oldVal, long newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(float oldVal, float newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(double oldVal, double newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Mark this component as subject to reload for the given
+     * aspect if the property, that is given in its old and new
+     * fashion, changed. Convenience method for {@link #reload(int)}
+     *
+     * @param oldVal the old value of some property
+     * @param newVal the new value of some property
+     */
+    protected final void reloadIfChange(char oldVal, char newVal) {
+        if (oldVal != newVal) {
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Let the code generator delegate write the component's code
+     * to the device. The code generator is the actual 'plaf'.
+     *
+     * @param s the Device to write into
+     * @throws IOException Thrown if the connection to the client gets broken,
+     *                     for example when the user stops loading
+     */
+    public void write(Device s) throws IOException {
+        try {
+            if (visible) {
+                cg.write(s, this);
+            }
+        } catch (IOException se) {
+            // Typical double-clicks. Not severe
+            log.debug("Not Severe: Socket exception during code generation for " + getClass().getName() + se);
+        } catch (NoClassDefFoundError e) {
+            // Mostly happens when DWR jar is not in classpath
+            log.fatal("Error during code generation for " + getClass().getName(), e);
+        } catch (Throwable t) {
+            // should we warn here? or maybe throw an error...
+            log.error("Exception during code generation for " + getClass().getName(), t);
+        }
+    }
+
+    /**
+     * A string representation of this component. Uses the {@link #paramString()} methods
+     *
+     * @return string representation of this component with all properties.
+     */
+    public String toString() {
+        return getClass().getName() + "[" + getName() + "]";
+    }
+
+
+    /**
+     * Generates a string describing this <code>SComponent</code>.
+     * This method is mainly for debugging purposes.
+     *
+     * @return a string containing all properties
+     */
+    protected String paramString() {
+        SStringBuilder buffer = new SStringBuilder(getClass().getName());
+        buffer.append("[");
+
+        try {
+            BeanInfo info = Introspector.getBeanInfo(getClass());
+            PropertyDescriptor[] descriptors = info.getPropertyDescriptors();
+
+            boolean first = true;
+            for (int i = 0; i < descriptors.length; i++) {
+                try {
+                    Method getter = descriptors[i].getReadMethod();
+                    if (getter == null || getter.getName().startsWith("getParent"))
+                        continue;
+                    // System.out.println("invoking " + this.getClass().getDescription()+"."+getter.getDescription());
+                    Object value = getter.invoke(this, null);
+                    if (first)
+                        first = false;
+                    else
+                        buffer.append(",");
+                    buffer.append(descriptors[i].getName() + "=" + value);
+                } catch (Exception e) {
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        buffer.append("]");
+        return buffer.toString();
+    }
+
+    /**
+     * Encodes a low level event id for using it in a request parameter. Every
+     * {@link LowLevelEventListener} should encode its LowLevelEventId before
+     * using it in a request parameter. This encoding adds consistency checking
+     * for outtimed requests ("Back Button")
+     */
+    private String encodeLowLevelEventId(String lowLevelEventId) {
+        if (getParentFrame() != null)
+            if (!(this instanceof LowLevelEventListener) ||
+                    ((LowLevelEventListener) this).isEpochCheckEnabled()) {
+                return (getParentFrame().getEventEpoch()
+                        + SConstants.UID_DIVIDER
+                        + lowLevelEventId);
+            }
+        return lowLevelEventId;
+    }
+
+    /**
+     * Encodes a low level event id for using it in a request parameter. Every
+     * {@link LowLevelEventListener} should encode its LowLevelEventId before
+     * using it in a request parameter. This encoding adds consistency checking
+     * for outtimed requests ("Back Button")
+     */
+    public final String getEncodedLowLevelEventId() {
+        if (getUseNamedEvents() && getName() != null)
+            return name;
+        else
+            return encodeLowLevelEventId(getLowLevelEventId());
+    }
+
+    private boolean getUseNamedEvents() {
+        if (useNamedEvents == null) {
+            useNamedEvents = ("true".equalsIgnoreCase((String) getSession().getProperty("wings.event.usenames")))
+                    ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return useNamedEvents.booleanValue();
+    }
+
+    /**
+     * Default implementation of the method in
+     * {@link LowLevelEventListener}.
+     */
+    public String getLowLevelEventId() {
+        return getName();
+    }
+
+    /**
+     * Return the parent frame.
+     * <p><b>NOTE:</b> You will receive <code>null</code> if you call this i.e. during
+     * component creation time, as the parent frame is set when you add it to a visible {@link SContainer}.
+     * Use {@link #addParentFrameListener(org.wings.event.SParentFrameListener)} in this case.
+     *
+     * @return the parent frame
+     * @see #addParentFrameListener(org.wings.event.SParentFrameListener)
+     */
+    public SFrame getParentFrame() {
+        return parentFrame;
+    }
+
+    /**
+     * Return true, if this component is contained in a form.
+     *
+     * @return true, if this component resides in a form, false otherwise
+     */
+    public final boolean getResidesInForm() {
+        SComponent parent = getParent();
+
+        boolean actuallyDoes = false;
+        while (parent != null && !(actuallyDoes = (parent instanceof SForm))) {
+            parent = parent.getParent();
+        }
+
+        return actuallyDoes;
+    }
+
+    /**
+     * Set the tooltip text.
+     *
+     * @param t the new tooltip text
+     */
+    public void setToolTipText(String t) {
+        reloadIfChange(this.tooltip, t);
+        tooltip = t;
+    }
+
+    /**
+     * Return the tooltip text.
+     *
+     * @return the tooltip text
+     */
+    public String getToolTipText() {
+        return tooltip;
+    }
+
+    /**
+     * The index in which the focus is traversed using Tab. This is
+     * a very simplified notion of traversing the focus, but that is,
+     * what browser like interfaces currently offer. This has a bit rough
+     * edge, since you have to make sure, that the index is unique within
+     * the whole frame. You probably don't want to change this
+     * programmatically, but this is set usually by the template property
+     * manager.
+     *
+     * @param index the focus traversal index. Pressing the focus traversal
+     *              key (usually TAB) in the browser jumps to the next index.
+     *              Must not be zero.
+     */
+    public void setFocusTraversalIndex(int index) {
+        reloadIfChange(this.focusTraversalIndex, index);
+        focusTraversalIndex = index;
+    }
+
+    /**
+     * returns the focus traversal index.
+     *
+     * @see #setFocusTraversalIndex(int)
+     */
+    public int getFocusTraversalIndex() {
+        return focusTraversalIndex;
+    }
+
+    /**
+     * Clone this component.
+     *
+     * @return a clone of this component
+     */
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (Exception e) {
+            log.error("Unable to clone component", e);
+            return null;
+        }
+    }
+
+    /**
+     * Return the value of the horizontal alignment property.
+     *
+     * @return the horizontal alignment
+     * @see SConstants
+     */
+    public int getHorizontalAlignment() {
+        return horizontalAlignment;
+    }
+
+    /**
+     * Set the horizontal alignment.
+     *
+     * @param alignment new value for the horizontal alignment
+     * @see SConstants
+     */
+    public void setHorizontalAlignment(int alignment) {
+        reloadIfChange(this.horizontalAlignment, alignment);
+        horizontalAlignment = alignment;
+    }
+
+    /**
+     * Set the vertical alignment.
+     *
+     * @param alignment new value for the vertical alignment
+     * @see SConstants
+     */
+    public void setVerticalAlignment(int alignment) {
+        reloadIfChange(this.verticalAlignment, alignment);
+        verticalAlignment = alignment;
+    }
+
+    /**
+     * Return the value of the vertical alignment property.
+     *
+     * @return the vertical alignment
+     * @see SConstants
+     */
+    public int getVerticalAlignment() {
+        return verticalAlignment;
+    }
+
+    private Map clientProperties;
+
+    /**
+     * @return a small HashMap
+     * @see #putClientProperty
+     * @see #getClientProperty
+     */
+    private Map getClientProperties() {
+        if (clientProperties == null) {
+            clientProperties = new HashMap(2);
+        }
+        return clientProperties;
+    }
+
+
+    /**
+     * Returns the value of the property with the specified key.  Only
+     * properties added with <code>putClientProperty</code> will return
+     * a non-null value.
+     *
+     * @return the value of this property or null
+     * @see #putClientProperty
+     */
+    public final Object getClientProperty(Object key) {
+        if (clientProperties == null) {
+            return null;
+        } else {
+            return getClientProperties().get(key);
+        }
+    }
+
+    /**
+     * Add an arbitrary key/value "client property" to this component.
+     * <p/>
+     * The <code>get/putClientProperty<code> methods provide access to
+     * a small per-instance hashtable. Callers can use get/putClientProperty
+     * to annotate components that were created by another module, e.g. a
+     * layout manager might store per child constraints this way.  For example:
+     * <pre>
+     * componentA.putClientProperty("to the left of", componentB);
+     * </pre>
+     * <p/>
+     * If value is null this method will remove the property.
+     * Changes to client properties are reported with PropertyChange
+     * events.  The name of the property (for the sake of PropertyChange
+     * events) is <code>key.toString()</code>.
+     * <p/>
+     * The clientProperty dictionary is not intended to support large
+     * scale extensions to SComponent nor should be it considered an
+     * alternative to subclassing when designing a new component.
+     *
+     * @see #getClientProperty
+     */
+    public final void putClientProperty(Object key, Object value) {
+        if (value != null) {
+            getClientProperties().put(key, value);
+        } else {
+            getClientProperties().remove(key);
+        }
+    }
+
+
+    /**
+     * Set the look and feel delegate for this component.
+     * SComponent subclasses generally override this method
+     * to narrow the argument type, e.g. in STextField:
+     * <pre>
+     * public void setCG(TextFieldCG newCG) {
+     *     super.setCG(newCG);
+     * }
+     * </pre>
+     *
+     * @see #updateCG
+     * @see org.wings.plaf.CGManager#getLookAndFeel
+     * @see org.wings.plaf.CGManager#getCG
+     */
+    public void setCG(ComponentCG newCG) {
+        /* We do not check that the CG instance is different
+         * before allowing the switch in order to enable the
+         * same CG instance *with different default settings*
+         * to be installed.
+         */
+        if (cg != null) {
+            cg.uninstallCG(this);
+        }
+        ComponentCG oldCG = cg;
+        cg = newCG;
+        if (cg != null) {
+            cg.installCG(this);
+        }
+        reloadIfChange(cg, oldCG, ReloadManager.STATE);
+    }
+
+    /**
+     * Return the look and feel delegate.
+     *
+     * @return the componet's cg
+     */
+    public ComponentCG getCG() {
+        return cg;
+    }
+
+    /**
+     * Notification from the CGFactory that the L&F has changed.
+     *
+     * @see SComponent#updateCG
+     */
+    public void updateCG() {
+        if (getSession() == null) {
+            log.warn("no session yet.");
+        } else if (getSession().getCGManager() == null) {
+            log.warn("no CGManager");
+        } else {
+            setCG(getSession().getCGManager().getCG(this));
+        }
+    }
+
+    /**
+     * Invite a ComponentVisitor.
+     * Invokes visit(SComponent) on the ComponentVisitor.
+     *
+     * @param visitor the visitor to be invited
+     */
+    public void invite(ComponentVisitor visitor)
+            throws Exception {
+        visitor.visit(this);
+    }
+
+    /**
+     * use this method for changing a variable. if a new value is different
+     * from the old value set the new one and notify e.g. the reloadmanager...
+     */
+    protected static boolean isDifferent(Object oldObject,
+                                         Object newObject) {
+        if (oldObject == newObject)
+            return false;
+
+        if (oldObject == null)
+            return true;
+
+        return !oldObject.equals(newObject);
+    }
+
+    /**
+     * Adds an event listener for the given event class
+     *
+     * @param type     The class/type of events to listen to.
+     * @param listener The listener itself.
+     */
+    protected final void addEventListener(Class type, EventListener listener) {
+        if (listeners == null) {
+            listeners = new EventListenerList();
+        }
+        listeners.add(type, listener);
+    }
+
+    /**
+     * Removed named event listener.
+     *
+     * @param type     The class/type of events to listen to.
+     * @param listener The listener itself.
+     */
+    protected final void removeEventListener(Class type, EventListener listener) {
+        if (listeners != null) {
+            listeners.remove(type, listener);
+        }
+    }
+
+    /**
+     * Returns the number of listeners of the specified type for this component.
+     *
+     * @param type The type of listeners
+     * @return The number of listeners
+     * @see EventListenerList
+     */
+    protected final int getListenerCount(Class type) {
+        if (listeners != null) {
+            return listeners.getListenerCount(type);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Returns all the listeners of this component. For performance reasons, this is the actual data
+     * structure and so no modification of this array should be made.
+     *
+     * @return All listeners of this component. The result array has a pair structure,
+     *         the first element of each pair is the listener type, the second the listener
+     *         itself. It is guaranteed that this returns a non-null array.
+     * @see EventListenerList
+     */
+    protected final Object[] getListenerList() {
+        if (listeners == null) {
+            return EMPTY_OBJECT_ARRAY;
+        } else {
+            return listeners.getListenerList();
+        } // end of else
+    }
+
+    /**
+     * Creates an typed array of all listeners of the specified type
+     *
+     * @param type All listeners of this type are added to the result array
+     * @return an array of the specified type with all listeners of the specified type
+     * @see EventListenerList
+     */
+    public final EventListener[] getListeners(Class type) {
+        if (listeners != null) {
+            return listeners.getListeners(type);
+        } else {
+            return (EventListener[]) Array.newInstance(type, 0);
+        }
+    }
+
+    /**
+     * Adds a listenere to this component which wil get notified when the rendering of
+     * this components starts. (This happens after all events / request has been processed and wingS
+     * starts to build the response).
+     *
+     * @param renderListener
+     * @see SRenderListener
+     */
+    public final void addRenderListener(SRenderListener renderListener) {
+        addEventListener(SRenderListener.class, renderListener);
+        fireRenderEvents = true;
+    }
+
+
+    /**
+     * Removes the named render listener.
+     *
+     * @param renderListener Render listener to remove
+     * @see #addRenderListener(org.wings.event.SRenderListener)
+     * @see SRenderListener
+     */
+    public final void removeRenderListener(SRenderListener renderListener) {
+        removeEventListener(SRenderListener.class, renderListener);
+    }
+
+    /**
+     * <b>Internal method</b> called by the CGs to indicate different states of the rendering process.
+     *
+     * @param type Either {@link #DONE_RENDERING} or {@link #START_RENDERING}.
+     */
+    public final void fireRenderEvent(int type) {
+        if (fireRenderEvents) {
+            // maybe the better way to do this is to user the getListenerList
+            // and iterate through all listeners, this saves the creation of
+            // an array but it must cast to the apropriate listener
+            Object[] listeners = getListenerList();
+            for (int i = listeners.length - 2; i >= 0; i -= 2) {
+                if (listeners[i] == SRenderListener.class) {
+                    // Lazily create the event:
+                    if (renderEvent == null) {
+                        renderEvent = new SRenderEvent(this);
+                    } // end of if ()
+
+                    switch (type) {
+                        case START_RENDERING:
+                            ((SRenderListener) listeners[i + 1]).startRendering(renderEvent);
+                            break;
+                        case DONE_RENDERING:
+                            ((SRenderListener) listeners[i + 1]).doneRendering(renderEvent);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Forwards the scrollRectToVisible() message to the SComponent's
+     * parent. Components that can service the request, such as
+     * SScrollPane, override this method and perform the scrolling.
+     *
+     * @param aRect the visible Rectangle
+     * @see SScrollPane
+     */
+    public void scrollRectToVisible(Rectangle aRect) {
+        if (parent != null) {
+            parent.scrollRectToVisible(aRect);
+        }
+    }
+
+    /**
+     * Requests the edit focus for this component for the following renderings
+     * by calling {@link SFrame#setFocus(SComponent)}.
+     */
+    public void requestFocus() {
+        if (getParentFrame() != null) {
+            getParentFrame().setFocus(this);
+        }
+    }
+
+    /**
+     * Returns <code>true</code> if this <code>SComponent</code> is owning the edit focus.
+     *
+     * @return <code>true</code> if this <code>SComponent</code> is owning the edit focus otherwise <code>false</code>
+     * @see #requestFocus()
+     */
+    public boolean isFocusOwner() {
+        if (getParentFrame() != null)
+            return this == getParentFrame().getFocus();
+        return false;
+    }
+
+    /**
+     * Set display mode (href or form-component).
+     * An AbstractButton can appear as HTML-Form-Button or as
+     * HTML-HREF. If button is inside a {@link SForm} the default
+     * is displaying it as html form button.
+     * Setting <i>showAsFormComponent</i> to <i>false</i> will
+     * force displaying as href even if button is inside
+     * a form.
+     *
+     * @param showAsFormComponent if true, display as link, if false as html form component.
+     */
+    public void setShowAsFormComponent(boolean showAsFormComponent) {
+        if (this.showAsFormComponent != showAsFormComponent) {
+            this.showAsFormComponent = showAsFormComponent;
+            reload(ReloadManager.STATE);
+        }
+    }
+
+    /**
+     * Test, what display method is set.
+     *
+     * @return true, if displayed as link, false when displayed as html form component.
+     * @see #setShowAsFormComponent(boolean)
+     */
+    // TODO bsc:  rename to isShowas...
+    public boolean getShowAsFormComponent() {
+        return showAsFormComponent && getResidesInForm();
+    }
+
+    /**
+     * Binds action names to {@link Action}s. Use for key binding feature.
+     *
+     * @param actionMap The new action map.
+     * @see #setInputMap(javax.swing.InputMap)
+     * @see ActionMap
+     * @see InputMap
+     */
+    public void setActionMap(ActionMap actionMap) {
+        this.actionMap = actionMap;
+    }
+
+    /**
+     * Action map for key binding feature
+     *
+     * @return The current action map
+     * @see #setActionMap(javax.swing.ActionMap)
+     */
+    public ActionMap getActionMap() {
+        if (actionMap == null)
+            actionMap = new ActionMap();
+        return actionMap;
+    }
+
+
+    /**
+     * Map for key binding feature. (?) Binds input keystrokes to action names (?).
+     *
+     * @param inputMap The current input map.
+     * @see InputMap
+     * @see ActionMap
+     * @see #setActionMap(javax.swing.ActionMap)
+     * @see JComponent#setInputMap(int, javax.swing.InputMap)
+     */
+    public void setInputMap(InputMap inputMap) {
+        setInputMap(WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
+    }
+
+    /**
+     * Sets The current input map.
+     *
+     * @param inputMap  The new input map
+     * @param condition Either {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT} or {@link #WHEN_IN_FOCUSED_FRAME}
+     * @see JComponent#setInputMap(int, javax.swing.InputMap)
+     */
+    public void setInputMap(int condition, InputMap inputMap) {
+        initInputMaps();
+        this.inputMaps[condition] = inputMap;
+        if (condition == WHEN_IN_FOCUSED_FRAME && inputMap != null) {
+            registerGlobalInputMapWithFrame();
+        }
+    }
+
+    /**
+     * @return The input map for the condition {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT}
+     * @see #setInputMap(javax.swing.InputMap)
+     */
+    public InputMap getInputMap() {
+        return getInputMap(WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    /**
+     * @param condition Either {@link #WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT} or {@link #WHEN_IN_FOCUSED_FRAME}
+     * @return The input map for the given condition.
+     * @see #setInputMap(int, javax.swing.InputMap)
+     */
+    public InputMap getInputMap(int condition) {
+        initInputMaps();
+        InputMap result = inputMaps[condition];
+        if (result == null) {
+            inputMaps[condition] = new InputMap();
+            result = inputMaps[condition];
+        }
+        if (condition == WHEN_IN_FOCUSED_FRAME) {
+            // map could be filled
+            registerGlobalInputMapWithFrame();
+        }
+        return result;
+    }
+
+
+    private void registerGlobalInputMapWithFrame() {
+        final SFrame parentFrame = getParentFrame();
+        if (parentFrame != null) {
+            parentFrame.registerGlobalInputMapComponent(this);
+        } else {
+            if (globalInputMapListener == null) {
+                globalInputMapListener = new GlobalInputMapParentFrameListener(this);
+                addParentFrameListener(globalInputMapListener);
+            }
+        }
+    }
+
+    private void initInputMaps() {
+        if (inputMaps == null) {
+            inputMaps = new InputMap[ACTION_CONDITIONS_AMOUNT];
+        }
+    }
+
+    protected void processLowLevelEvent(String name, String[] values) {
+    }
+
+    protected boolean processKeyEvents(String[] values) {
+        if (actionMap == null)
+            return false;
+
+        if (log.isDebugEnabled())
+            log.debug("processKeyEvents " + Arrays.asList(values));
+
+        boolean arm = false;
+        for (int i = 0; i < values.length; i++) {
+            String value = values[i];
+            Action action = actionMap.get(value);
+            if (action != null) {
+                actionEvents.put(action, new ActionEvent(this, 0, value));
+                arm = true;
+            }
+        }
+        if (arm)
+            SForm.addArmedComponent((LowLevelEventListener) this);
+
+        return arm;
+    }
+
+    /**
+     * Internal event trigger used by CGs.
+     * This Method is called internal and should not be called directly
+     */
+    public void fireFinalEvents() {
+        fireKeyEvents();
+    }
+
+    /**
+     * Internal method to trigger firing of key events.
+     */
+    protected void fireKeyEvents() {
+        for (Iterator iterator = actionEvents.entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            Action action = (Action) entry.getKey();
+            ActionEvent event = (ActionEvent) entry.getValue();
+            action.actionPerformed(event);
+        }
+        actionEvents.clear();
+    }
+
+    /**
+     * Method called to notify this <code>SComponent</code> that it has no longer a parent component.
+     * This Method is called internal and should not be called directly, but can be overerloaded
+     * to react on this event.
+     */
+    public void removeNotify() {
+        /* currently nothing to do, but great to overwrite for some dangling eventListener */
+    }
+
+    /**
+     * Method called to notify this <code>SComponent</code> that it has a new parent component.
+     * This Method is called internal and should not be called directly, but can be overerloaded
+     * to react on this event.
+     */
+    public void addNotify() {
+        /* currently nothing to do */
+    }
+
+    // Nice: undocumented and useless
+    /*public ArrayList getMenus() {
+        ArrayList menus = new ArrayList();
+        if (isVisible()) {
+            SPopupMenu pmenu = getComponentPopupMenu();
+            if (pmenu != null) {
+                menus.add(pmenu);
+            }
+        }
+        return menus;
+    } */
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        // preprocessing, e. g. serialize static vars or transient variables as cipher text
+        in.defaultReadObject(); // default serialization
+        // do postprocessing here
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        try {
+            // preprocessing
+            out.defaultWriteObject(); // default
+            // postprocessing
+        } catch (IOException e) {
+            log.warn("Unexpected Exception", e);
+            throw e;
+        }
+    }
+
+    /**
+     * Listener registering/deregistering this component on the parent frame.
+     */
+    private final static class GlobalInputMapParentFrameListener implements SParentFrameListener, Serializable {
+        private final SComponent me;
+
+        public GlobalInputMapParentFrameListener(SComponent me) {
+            this.me = me;
+        }
+
+        public void parentFrameAdded(SParentFrameEvent e) {
+            if (e.getParentFrame() != null)
+                e.getParentFrame().registerGlobalInputMapComponent(me);
+        }
+
+        public void parentFrameRemoved(SParentFrameEvent e) {
+            if (e.getParentFrame() != null)
+                e.getParentFrame().deregisterGlobalInputMapComponent(me);
+        }
+    }
+}

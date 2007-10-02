@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!-- ant build file for wingS Demos-->
+<!-- $Id$ -->
+
+<project name="frameset demo" default="build" basedir=".">
+    <property environment="env"/>
+    <!-- read custom properties from file -->
+    <property file="../../etc/custom-build.properties"/>
+    <property file="../../etc/build.properties"/>
+
+    <path id="build.classpath">
+        <fileset dir="../../lib" includes="*.jar"/>
+        <fileset dir="../../build/web/WEB-INF/lib" includes="*.jar"/>
+    </path>
+
+    <target name="dependencies" if="build.deps">
+        <ant dir="../.." taskname="build"/>
+    </target>
+
+    <target name="prepare" depends="dependencies">
+        <tstamp/>
+        <mkdir dir="build"/>
+        <mkdir dir="build/class"/>
+        <mkdir dir="build/web"/>
+        <mkdir dir="${deploy.frameset}"/>
+    </target>
+
+    <!-- ==================== Build wingS Demos ================ -->
+    <target name="compile" depends="prepare">
+        <javac srcdir="src/java"
+            destdir="build/class"
+            debug="${build.debug}"
+            deprecation="${build.deprecation}">
+            <classpath refid="build.classpath"/>
+        </javac>
+    </target>
+
+    <target name="build" depends="compile">
+        <copy todir="build/web">
+            <fileset dir="src/web"/>
+            <fileset dir="../../build/web"/>
+            <fileset dir="src/java/frameset" includes="*.java"/>
+        </copy>
+        <copy todir="build/web/WEB-INF/classes">
+            <fileset dir="build/class"/>
+        </copy>
+    </target>
+
+    <target name="war" depends="build" description="Create a deployable WAR file">
+        <war destfile="build/frameset.war" webxml="src/web/WEB-INF/web.xml">
+            <fileset dir="build/web">
+                <exclude name="**/web.xml"/>
+            </fileset>
+        </war>
+    </target>
+
+    <target name="deploy" depends="build">
+        <mkdir dir="${deploy.frameset}"/>
+        <copy todir="${deploy.frameset}">
+            <fileset dir="build/web"/>
+        </copy>
+    </target>
+
+    <!-- ==================== Admin ==================== -->
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="${deploy.frameset}"/>
+        <delete>
+            <fileset dir="src">
+                <include name="**/*.class"/>
+                <include name="**/*.u"/>
+                <include name="**/*.bak"/>
+                <include name="**/*~"/>
+                <include name="**/.#*"/>
+            </fileset>
+        </delete>
+    </target>
+</project>
