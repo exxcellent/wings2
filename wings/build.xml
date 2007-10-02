@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="build" name="wingS">
+    <!-- read properties from file -->
+    <property file="etc/custom-build.properties"/>
+    <property file="etc/build.properties"/>
+
+    <property name="servlet.version" value="servlet.jar"/>
+    <property name="commons-logging.version" value="commons-logging.jar"/>
+    <property name="regexp.version" value="jakarta-regexp-1.2.jar"/>
+    <property name="beanshell.version" value="bsh-core.jar"/>
+    <property name="httpclient.version" value="commons-httpclient-2.0-beta1.jar"/>
+    <property name="lfgr.version" value="kdeclassic-lfgr.jar"/>
+    <property name="dwr.version" value="dwr.jar"/>
+    <property name="xalan.version" value="xalan.jar"/>
+
+    <path id="build.classpath">
+        <fileset dir="${lib}">
+            <include name="${servlet.version}"/>
+            <include name="${commons-logging.version}"/>
+            <include name="${regexp.version}"/>
+            <include name="${beanshell.version}"/>
+            <include name="${httpclient.version}"/>
+            <include name="${lfgr.version}"/>
+            <include name="${dwr.version}"/>
+            <include name="${xalan.version}"/>
+        </fileset>
+    </path>
+
+    <target name="prepare" depends="splash">
+        <mkdir dir="build/class"/>
+        <mkdir dir="build/doc"/>
+        <tstamp>
+            <format property="wings.buildtime" pattern="yyyy-MM-dd HH:mm"/>
+        </tstamp>
+    </target>
+
+    <target depends="prepare"  name="version.java">
+        <filter token="WINGS_VERSION" value="${wings.version}"/>
+        <filter token="COMPILE_TIME" value="${wings.buildtime}"/>
+        <copy file="src/res/org/wings/Version.java.in"
+            tofile="src/java/org/wings/Version.java"
+            filtering="yes"/>
+    </target>
+
+    <target name="compile" depends="prepare, version.java">
+        <javac debug="${build.debug}" deprecation="${build.deprecation}"
+            destdir="build/class" srcdir="src/java" source="1.3" target="1.3">
+            <classpath refid="build.classpath"/>
+        </javac>
+    </target>
+
+    <target name="build" depends="compile" description="build">
+        <mkdir dir="build/web/WEB-INF/lib"/>
+        <jar jarfile="build/web/WEB-INF/lib/wings.jar">
+            <fileset dir="build/class">
+                <exclude name="org/wings/plaf/xhtml/**"/>
+                <exclude name="org/wings/plaf/css/**"/>
+            </fileset>
+            <fileset dir="src/res">
+                <exclude name="**/*.js"/>
+                <exclude name="**/*.css"/>
+                <exclude name="**/*.htc"/>
+                <exclude name="**/*.java.in"/>
+            </fileset>
+        </jar>
+        <jar jarfile="build/web/WEB-INF/lib/css.jar">
+            <fileset dir="build/class">
+                <include name="org/wings/plaf/xhtml/**"/>
+                <include name="org/wings/plaf/css/**"/>
+                <include name="org/wingx/plaf/**"/>
+            </fileset>
+            <fileset dir="src/java">
+                <include name="org/wings/plaf/css/*.js"/>
+                <include name="org/wingx/calendar/**"/>
+                <include name="org/wingx/plaf/**/*.js"/>
+            </fileset>
+            <fileset dir="src/res">
+                <include name="**/*.js"/>
+                <include name="**/*.css"/>
+                <include name="**/*.htc"/>
+                <include name="**/*.properties"/>
+            </fileset>
+        </jar>
+        <copy todir="build/web/WEB-INF/lib">
+            <fileset dir="${lib}">
+                <include name="${regexp.version}"/>
+                <include name="${beanshell.version}"/>
+                <include name="${lfgr.version}"/>
+                <include name="${commons-logging.version}"/>
+                <include name="${dwr.version}"/>
+                <include name="${xalan.version}"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target depends="prepare" description="build javadoc" name="javadoc">
+        <!-- Make API JavaDoc -->
+        <mkdir dir="build/doc/api"/>
+        <javadoc classpathref="build.classpath" destdir="build/doc/api"
+                 link="http://java.sun.com/j2se/1.4/docs/api/" maxmemory="128m" packagenames="org.wings.*"
+                 sourcepath="src/java" use="true" version="true"
+                 doctitle="wingS ${wings.version}"
+                 windowtitle="wingS ${wings.version}"
+                 bottom="wingS Swings ;-)" >
+            <excludepackage name="org.wings.plaf.css.*" /> 
+        </javadoc>
+    </target>
+
+    <target depends="javadoc, check-full-dist" name="doc">
+        <!-- Start DocBook document generation -->
+        <ant dir="doc/docbook" target="all.doc" />
+    </target>
+
+    <target depends="check-full-dist,clean,build,doc" name="dist">
+        <!-- lib -->
+        <mkdir dir="dist/lib"/>
+        <copy todir="dist/lib">
+            <fileset dir="${lib}">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <!-- web -->
+        <mkdir dir="dist/web"/>
+        <copy todir="dist/web">
+            <fileset dir="build/web" />
+        </copy>
+
+        <!-- bin -->
+        <mkdir dir="dist/bin"/>
+        <copy todir="dist/bin">
+            <fileset dir="bin">
+                <!-- excluded as these dev script probably
+                     only confuse beginners -->
+                <exclude name="cs.sh"/>
+                <exclude name="kde2jlfgr.sh"/>
+            </fileset>
+        </copy>
+
+        <!-- manual -->
+        <mkdir dir="dist/doc"/>
+        <copy todir="dist/doc">
+            <fileset dir="doc/docbook/build" />
+        </copy>
+
+        <!-- tutorial -->
+        <mkdir dir="dist/doc/tutorial/hellowings"/>
+        <copy todir="dist/doc/tutorial/hellowings">
+            <fileset dir="doc/tutorial/hellowings">
+                <exclude name="build/**"/>
+                <exclude name="**/.*"/>
+                <exclude name="**/.*/**"/>
+                <exclude name="**/*.class"/>
+                <exclude name="**/*.u"/>
+            </fileset>
+        </copy>
+
+        <!-- api -->
+        <mkdir dir="dist/doc/api"/>
+        <copy todir="dist/doc/api">
+            <fileset dir="build/doc/api"/>
+        </copy>
+
+        <!-- src -->
+        <copy todir="dist/src">
+            <fileset dir="src">
+                <exclude name="**/.*"/>
+                <exclude name="**/.*/**"/>
+                <exclude name="**/*.class"/>
+                <exclude name="**/*.u"/>
+                <exclude name="src/java/org/wings/Version.java"/>
+            </fileset>
+        </copy>
+
+        <!-- demo -->
+        <mkdir dir="dist/demo"/>
+        <copy todir="dist/demo">
+            <fileset dir="demo">
+                <exclude name="**/.*"/>
+                <exclude name="**/.*/**"/>
+                <exclude name="**/*.class"/>
+                <exclude name="**/*.u"/>
+                <include name="**/src/**"/>
+                <include name="**/build.xml"/>
+                <include name="**/*.txt"/>
+            </fileset>
+        </copy>
+
+        <!-- etc -->
+        <mkdir dir="dist/etc"/>
+        <copy todir="dist/etc">
+            <fileset dir="etc">
+                <exclude name="custom-build.properties"/>
+            </fileset>
+        </copy>
+
+        <!-- main -->
+        <property name="distname" value="${ant.project.name}-${wings.version}"/>
+        <filter token="VERSION" value="${wings.version}"/>
+        <copy file="VERSION" filtering="true" todir="dist"/>
+        <copy todir="dist">
+            <fileset dir=".">
+                <include name="COPYING"/>
+                <include name="CREDITS"/>
+                <include name="INSTALL"/>
+                <include name="README"/>
+                <include name="build.*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target depends="dist" description="create distribution tar.gz" name="tarball">
+        <property name="distname" value="${ant.project.name}-${wings.version}"/>
+        <delete dir="${distname}"/>
+        <mkdir dir="${distname}"/>
+        <copy todir="${distname}">
+            <fileset dir="dist"/>
+        </copy>
+
+        <!-- dist -->
+        <mkdir dir="${distname}/dist/lib"/>
+        <move todir="${distname}/dist/lib">
+            <fileset dir="${distname}/lib">
+                <include name="wings.jar"/>
+                <include name="css.jar"/>
+            </fileset>
+        </move>
+
+        <tar basedir="." includes="${distname}/" tarfile="${distname}.tar"/>
+        <gzip src="${distname}.tar" zipfile="${distname}.tar.gz"/>
+        <delete file="${distname}.tar"/>
+        <delete dir="${distname}"/>
+    </target>
+
+    <target description="cleanup build results" name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+        <delete>
+            <fileset dir="src">
+                <include name="**/*.class"/>
+                <include name="**/*.u"/>
+                <include name="**/*.bak"/>
+                <include name="**/*~"/>
+                <include name="**/.#*"/>
+            </fileset>
+        </delete>
+        <delete>
+            <fileset dir=".">
+                <include name="wingS*.tar.gz"/>
+            </fileset>
+        </delete>
+        <delete file="src/java/org/wings/Version.java"/>
+    </target>
+
+    <target depends="clean,build" description="re-build everything" name="all"/>
+
+    <!-- ### Utility tasks ################################################### -->
+
+    <target name="splash" unless="nosplash">
+        <splash imageurl="file:${basedir}/demo/wingset/src/web/icons/wings-logo.png"/>
+    </target>
+
+    <target name="check-full-dist">
+        <available file="doc/docbook/build.xml" property="full-distribution"/>
+        <fail unless="full-distribution">
+  Full CVS sources required!
+  This task requires that you have the complete wingS sources which
+  are available via CVS from the wingS website.
+  Please consult http://www.j-wings.org/ how to access the wingS CVS.
+        </fail>
+    </target>
+
+</project>

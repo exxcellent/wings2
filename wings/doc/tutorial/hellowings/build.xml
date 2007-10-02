@@ -1,0 +1,30 @@
+<project name="HelloWingS" default="war">
+    <path id="build.classpath">
+        <fileset dir="lib" includes="*.jar"/>
+        <fileset dir="web/WEB-INF/lib" includes="*.jar"/>
+    </path>
+
+    <target name="prepare">
+        <mkdir dir="build/class"/>
+    </target>
+
+    <target name="compile" depends="prepare">
+        <javac srcdir="src" destdir="build/class">
+            <classpath refid="build.classpath"/>
+        </javac>
+    </target>
+    
+    <target name="war" depends="compile">
+    	<war destfile="build/hellowings.war" 
+    	     webxml="web/WEB-INF/web.xml">
+    	   <classes dir="build/class"/>
+	   <fileset dir="web">
+	      <exclude name="**/web.xml" /> 
+	   </fileset>
+        </war>
+    </target>
+    
+    <target name="clean">
+       <delete dir="build"/>
+    </target>
+</project>

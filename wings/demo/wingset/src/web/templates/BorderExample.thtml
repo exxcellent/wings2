@@ -1,0 +1,11 @@
+<!-- Border Example Template
+     $Id$ -->
+<p>
+This example allows you to set the Border of this area
+<p>
+<table align="center">
+<tr><td style="padding: 10px"><object name="BorderExample"></object></td>
+    <td style="padding: 10px" bgcolor="white"><object name="Modifier"></object></td>
+</tr>
+</table>
+<p>
