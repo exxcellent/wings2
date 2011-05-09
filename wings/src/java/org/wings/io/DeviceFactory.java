@@ -15,6 +15,7 @@ package org.wings.io;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wings.externalizer.ExternalizedResource;
+import org.wings.session.Session;
 import org.wings.session.SessionManager;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ import java.io.IOException;
 public abstract class DeviceFactory {
     private final transient static Log log = LogFactory.getLog(DeviceFactory.class);
 
-    private static String DEFAULT_DEVICE_FACTORY = "org.wings.io.DeviceFactory$Default";
+    private static final String DEFAULT_DEVICE_FACTORY = "org.wings.io.DeviceFactory$Default";
 
     private static DeviceFactory factory;
 
@@ -52,30 +53,30 @@ public abstract class DeviceFactory {
      */
     public static DeviceFactory getDeviceFactory() {
         if (factory == null) {
-            synchronized (DeviceFactory.class) {
-                if (factory == null) {
+	    synchronized (DeviceFactory.class) {
+		if (factory == null) {
                     String className = (String) SessionManager.getSession().getProperty("wings.device.factory");
                     if (className == null) {
-                        className = DEFAULT_DEVICE_FACTORY;
+			className = DEFAULT_DEVICE_FACTORY;
                     }
 
-                    try {
-                        Class factoryClass = null;
-                        try {
+		    try {
+			Class factoryClass = null;
+			try {
                             factoryClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
                         } catch (ClassNotFoundException e) {
-                            // fallback, in case the servlet container fails to set the
-                            // context class loader.
-                            factoryClass = Class.forName(className);
-                        }
+			    // fallback, in case the servlet container fails to set the
+			    // context class loader.
+			    factoryClass = Class.forName(className);
+			}
                         factory = (DeviceFactory) factoryClass.newInstance();
                     } catch (Exception e) {
                         log.fatal("could not load wings.device.factory: " + className, e);
-                        throw new RuntimeException("could not load wings.device.factory: " +
+			throw new RuntimeException("could not load wings.device.factory: " +
                                 className + "(" + e.getMessage() + ")");
-                    }
-                }
-            }
+		    }
+		}
+	    }
         }
         return factory;
     }
@@ -95,11 +96,8 @@ public abstract class DeviceFactory {
      */
     static class Default extends DeviceFactory {
         protected Device create(ExternalizedResource externalizedResource) throws IOException {
-            return new ServletDevice(SessionManager.getSession().getServletResponse().getOutputStream());
-            /*if (externalizedResource.getExtension().equalsIgnoreCase("html"))
-              return new CachingDevice(new ServletDevice(SessionManager.getSession().getServletResponse().getOutputStream()));
-            else
-                return new ServletDevice(SessionManager.getSession().getServletResponse().getOutputStream());*/
+            final Session session = SessionManager.getSession();
+            return new ServletDevice(session.getServletResponse().getOutputStream(), session.getCharacterEncoding());
         }
     }
 

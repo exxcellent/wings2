@@ -155,7 +155,7 @@ public class SDialog extends SForm {
     public void hide() {
         log.debug("hide dialog");
         if (owner != null)
-            owner.popDialog();
+            owner.removeDialog(this);
         visible = false;
     }
 

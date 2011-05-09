@@ -562,7 +562,7 @@ final class SessionServlet
                 res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
             ServletOutputStream out = res.getOutputStream();
-            ServletDevice device = new ServletDevice(out);
+            ServletDevice device = new ServletDevice(out, getSession().getCharacterEncoding());
 
             String className = (String)session.getProperty("wings.error.handler");
             if (className == null)

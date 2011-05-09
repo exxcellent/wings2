@@ -458,7 +458,7 @@ public final class WingServlet
                                         HttpServletResponse response,
                                         ExternalizedResource extInfo)
             throws IOException {
-        return new ServletDevice(response.getOutputStream());
+        return new ServletDevice(response.getOutputStream(), "ISO-8859-1");
     }
 
     // TODO BSC: This issue is still pending. Refer to http://jira.j-wings.org/browse/WGS-84

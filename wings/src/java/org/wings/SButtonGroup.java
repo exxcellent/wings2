@@ -101,6 +101,22 @@ public class SButtonGroup implements SDelayedEventModel, Serializable {
                 SELECTION_CHANGED);
     }
 
+  /**
+     * Clears the selection such that none of the buttons
+     * in the <code>SButtonGroup</code> are selected.
+     */
+    public void clearSelection() {
+        if (selection != null) {
+            final SAbstractButton oldSelection = selection;
+            selection = null;
+
+            if (oldSelection.getGroup() == this)
+                oldSelection.setSelected(false);
+
+            fireActionPerformed(SELECTION_CHANGED);
+        }
+    }    
+
     /*
      * Konzeptionell richtiger waere hier SAbstractButton. Macht aber keinen
      * Sinn. Macht nur Sinn abstract Checkboxes(eventuell nur RadioButtons ???).
