@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -93,7 +94,7 @@ public class ResourceFactory
             return makeObject(property, type);
     }
 
-    private static Map instances = new HashMap();
+    private static Map instances = Collections.synchronizedMap(new HashMap());
 
     private static Object sharedInstance(String className) {
         Object cg = instances.get(className);
