@@ -14,26 +14,31 @@ package org.wings.plaf;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
  * A Property table that stores default. This table overrides the
  * mappings of its <code>parent</code> table.
  */
-public class ResourceDefaults
-        extends HashMap
-{
-    private PropertyChangeSupport changeSupport;
+public class ResourceDefaults {
+
+    private final Map defaultValues;
+    private final PropertyChangeSupport changeSupport;
     private ResourceDefaults parent;
     private ResourceFactory factory;
 
     /**
      * @param parent the parent defaults table that backs this defaults table
+     * @param properties Default values.
      */
     public ResourceDefaults(ResourceDefaults parent, Properties properties) {
         this.parent = parent;
         this.factory = new ResourceFactory(properties);
+        this.changeSupport = new PropertyChangeSupport(this);
+        this.defaultValues = Collections.synchronizedMap(new HashMap());
     }
 
     /**
@@ -49,7 +54,7 @@ public class ResourceDefaults
      * @see java.util.Map#put
      */
     public Object put(Object key, Object value) {
-        Object oldValue = (value == null) ? super.remove(key) : super.put(key, value);
+        Object oldValue = (value == null) ? defaultValues.remove(key) : defaultValues.put(key, value);
         if (key instanceof String) {
             firePropertyChange((String) key, oldValue, value);
         }
@@ -62,14 +67,26 @@ public class ResourceDefaults
      * the request is delegated to the parent defaults table
      *
      * @param key  the key
+     * @return the associated value or <code>null</code>
+     */
+    public Object get(Object key) {
+        return defaultValues.get(key);
+    }
+
+    /**
+     * Get a value from the defaults table.
+     * If the <code>key</code> is not associated with a value,
+     * the request is delegated to the parent defaults table
+     *
+     * @param key  the key
      * @param type the class of the value in question
      * @return the associated value or <code>null</code>
      */
     public Object get(Object key, Class type) {
-        Object value = super.get(key);
+        Object value = defaultValues.get(key);
         if (value == null) {
             // cached with a null value
-            if (super.containsKey(key))
+            if (defaultValues.containsKey(key))
                 return null;
 
             // ask the parent
@@ -81,41 +98,32 @@ public class ResourceDefaults
                 value = factory.get(key, type);
         }
 
-        super.put(key, value);
+        defaultValues.put(key, value);
         return value;
     }
 
 
     /**
-     * Add a PropertyChangeListener to the listener list.
-     * The listener is registered for all properties.
-     * <p/>
-     * A PropertyChangeEvent will get fired whenever a default
-     * is changed.
+     * Add a PropertyChangeListener to the listener list. The listener is registered for all properties. <p/> A PropertyChangeEvent will get
+     * fired whenever a default is changed.
      *
      * @param listener The PropertyChangeListener to be added
      * @see java.beans.PropertyChangeSupport
      */
-    public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
-        if (changeSupport == null) {
-            changeSupport = new PropertyChangeSupport(this);
-        }
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
 
 
     /**
-     * Remove a PropertyChangeListener from the listener list.
-     * This removes a PropertyChangeListener that was registered
-     * for all properties.
+     * Remove a PropertyChangeListener from the listener list. This removes a PropertyChangeListener that was registered for all
+     * properties.
      *
      * @param listener The PropertyChangeListener to be removed
      * @see java.beans.PropertyChangeSupport
      */
-    public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
-        if (changeSupport != null) {
-            changeSupport.removePropertyChangeListener(listener);
-        }
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
 
 
@@ -130,8 +138,6 @@ public class ResourceDefaults
      * @see java.beans.PropertyChangeSupport
      */
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-        if (changeSupport != null) {
-            changeSupport.firePropertyChange(propertyName, oldValue, newValue);
-        }
+        changeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
 }
